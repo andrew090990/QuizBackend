@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+
+    <bean id="categoryEntity" class="ru.andrewquiz.dao.quiz.CategoryEntity">
+        <property name="id" value="1"/>
+        <property name="name" value="Test Category"/>
+        <property name="suits">
+            <list>
+                <ref bean="suitEntity"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="suitEntity" class="ru.andrewquiz.dao.quiz.SuitEntity">
+        <property name="id" value="1"/>
+        <property name="name" value="Test Suit"/>
+        <property name="category" ref="categoryEntity"/>
+    </bean>
+
+</beans>
