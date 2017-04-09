@@ -16,4 +16,8 @@ public abstract class RestException extends RuntimeException {
     public abstract ExceptionCode getCode();
 
     public abstract HttpStatus getStatus();
+
+    public abstract String getDeveloperMessage();
+
+    public abstract String getUserMessage();
 }

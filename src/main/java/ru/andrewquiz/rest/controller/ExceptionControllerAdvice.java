@@ -16,11 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
-    @ExceptionHandler(value = UnknownResourceException.class)
+    @ExceptionHandler(value = RestException.class)
     protected ResponseEntity<ExceptionResponse> handleUnknownResourceException(RestException ex, HttpServletRequest request) {
         ExceptionResponse response = new ExceptionResponse(ex);
-        response.setMessage("Resource not found: " + request.getRequestURI());
-        response.setDeveloperMessage("Resource not found: " + request.getRequestURI());
 
         return new ResponseEntity<ExceptionResponse>(response, ex.getStatus());
     }

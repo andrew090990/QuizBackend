@@ -12,6 +12,8 @@ public class ExceptionResponse {
     public ExceptionResponse (RestException ex) {
         this.setStatus(ex.getStatus().value());
         this.setCode(ex.getCode().value());
+        this.setDeveloperMessage(ex.getDeveloperMessage());
+        this.setUserMessage(ex.getUserMessage());
     }
 
     public int getStatus() {
@@ -30,12 +32,12 @@ public class ExceptionResponse {
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getUserMessage() {
+        return userMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setUserMessage(String userMessage) {
+        this.userMessage = userMessage;
     }
 
     public String getDeveloperMessage() {
@@ -50,7 +52,7 @@ public class ExceptionResponse {
 
     private long code;
 
-    private String message;
+    private String userMessage;
 
     private String developerMessage;
 

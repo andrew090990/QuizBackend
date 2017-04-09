@@ -14,6 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 public class DefaultController {
     @RequestMapping("/**")
     public void unmappedRequest(HttpServletRequest request) {
-        throw new UnknownResourceException("Resource not found: " + request.getRequestURI());
+        throw new UnknownResourceException(request.getRequestURI());
     }
 }
