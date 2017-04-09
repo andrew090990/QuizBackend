@@ -7,11 +7,13 @@ package ru.andrewquiz.dto;
 public enum ExceptionCode {
 
     //4xx
-    CLIENT_ERROR(40000),
-    UNKNOWN_RESOURCE(40400),
+    CLIENT_ERROR(400000),
+    ENTITY_NOT_FOUND(400010),
+    UNKNOWN_RESOURCE(404000),
 
     //5xx
-    SERVER_ERROR(50000);
+    SERVER_ERROR(500000),
+    DATABASE_ERROR(500010);
 
     private long value;
 

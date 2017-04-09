@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.SuitEntity;
 import ru.andrewquiz.dto.quiz.Suit;
 import ru.andrewquiz.repository.quiz.SuitRepository;
+import ru.andrewquiz.rest.exception.EntityNotFoundException;
 import ru.andrewquiz.util.mapper.CustomDozerBeanMapper;
 
 import java.util.List;
@@ -37,6 +38,10 @@ public class SuitService {
     public Suit getSuit(long id) {
 
         SuitEntity suitEntity = repo.findOne(id);
+
+        if (suitEntity == null) {
+            throw new EntityNotFoundException("Cannot find suit with id = " + id);
+        }
 
         Suit suit = mapper.map(suitEntity, Suit.class);
 

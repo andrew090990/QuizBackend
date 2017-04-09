@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.CategoryEntity;
 import ru.andrewquiz.dto.quiz.Category;
 import ru.andrewquiz.repository.quiz.CategoryRepository;
+import ru.andrewquiz.rest.exception.EntityNotFoundException;
 import ru.andrewquiz.util.mapper.CustomDozerBeanMapper;
 
 import java.util.List;
@@ -28,6 +29,10 @@ public class CategoryService {
     public Category getCategory(long id) {
 
         CategoryEntity categoryEntity = repo.findOne(id);
+
+        if (categoryEntity == null) {
+            throw new EntityNotFoundException("Cannot find category with id " + id);
+        }
 
         Category category = mapper.map(categoryEntity, Category.class);
 

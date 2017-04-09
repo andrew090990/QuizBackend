@@ -1,6 +1,7 @@
 package ru.andrewquiz.dto;
 
 
+import org.springframework.http.HttpStatus;
 import ru.andrewquiz.rest.exception.RestException;
 
 /**
@@ -10,10 +11,15 @@ import ru.andrewquiz.rest.exception.RestException;
 public class ExceptionResponse {
 
     public ExceptionResponse (RestException ex) {
-        this.setStatus(ex.getStatus().value());
-        this.setCode(ex.getCode().value());
+        this(ex.getStatus(), ex.getCode());
+
         this.setDeveloperMessage(ex.getDeveloperMessage());
         this.setUserMessage(ex.getUserMessage());
+    }
+
+    public ExceptionResponse (HttpStatus status, ExceptionCode code) {
+        this.status = status.value();
+        this.code = code.value();
     }
 
     public int getStatus() {
