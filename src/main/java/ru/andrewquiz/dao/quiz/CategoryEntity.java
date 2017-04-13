@@ -1,7 +1,5 @@
 package ru.andrewquiz.dao.quiz;
 
-import ru.andrewquiz.dto.quiz.Category;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -12,6 +10,25 @@ import java.util.List;
 @Entity
 @Table(name = "categories")
 public class CategoryEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private CategoryEntity parentCategory;
+
+    @OneToMany(mappedBy = "category")
+    private List<SuitEntity> suits;
+
+    @OneToMany(mappedBy = "parentCategory")
+    private List<CategoryEntity> childCategories;
+
     public Long getId() {
         return id;
     }
@@ -51,24 +68,5 @@ public class CategoryEntity {
     public void setChildCategories(List<CategoryEntity> childCategories) {
         this.childCategories = childCategories;
     }
-
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private CategoryEntity parentCategory;
-
-    @OneToMany(mappedBy = "category")
-    private List<SuitEntity> suits;
-
-    @OneToMany(mappedBy = "parentCategory")
-    private List<CategoryEntity> childCategories;
 
 }

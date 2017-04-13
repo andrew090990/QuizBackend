@@ -8,6 +8,10 @@ import ru.andrewquiz.dto.ExceptionCode;
  */
 public class IllegalRequestException extends RestException {
 
+    private static final ExceptionCode CODE = ExceptionCode.ILLEGAL_REQUEST;
+
+    private static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
+
     public IllegalRequestException(String msg) {
         super(msg);
     }
@@ -32,7 +36,4 @@ public class IllegalRequestException extends RestException {
         return "Illegal request";
     }
 
-    private static final ExceptionCode CODE = ExceptionCode.ILLEGAL_REQUEST;
-
-    private static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
 }

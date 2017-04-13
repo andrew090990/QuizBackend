@@ -22,6 +22,10 @@ import java.util.List;
 @RequestMapping("/suits")
 public class SuitController {
 
+    private SuitService suitService;
+
+    private Logger logger = Logger.getLogger(SuitController.class);
+
     @Autowired
     public SuitController(SuitService suitService) {
         this.suitService = suitService;
@@ -38,10 +42,5 @@ public class SuitController {
 
         return suitService.getSuit(suitId);
     }
-
-
-    private SuitService suitService;
-
-    private Logger logger = Logger.getLogger(SuitController.class);
 
 }

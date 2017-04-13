@@ -9,6 +9,10 @@ import ru.andrewquiz.dto.ExceptionCode;
 
 public class EntityNotFoundException extends RestException {
 
+    private static final ExceptionCode CODE = ExceptionCode.ENTITY_NOT_FOUND;
+
+    private static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
+
     public EntityNotFoundException(String msg) {
         super(msg);
     }
@@ -37,7 +41,4 @@ public class EntityNotFoundException extends RestException {
         return getMessage();
     }
 
-    private static final ExceptionCode CODE = ExceptionCode.ENTITY_NOT_FOUND;
-
-    private static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
 }

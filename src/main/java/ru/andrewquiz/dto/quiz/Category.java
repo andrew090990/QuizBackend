@@ -1,9 +1,14 @@
 package ru.andrewquiz.dto.quiz;
 
 
-import org.dozer.Mapping;
-
 public class Category {
+
+    private Long id;
+
+    private String name;
+
+    private Long parentCategoryId;
+
     public Long getId() {
         return id;
     }
@@ -28,10 +33,4 @@ public class Category {
         this.parentCategoryId = parentCategoryId;
     }
 
-
-    private Long id;
-
-    private String name;
-
-    private Long parentCategoryId;
 }

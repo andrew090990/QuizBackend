@@ -12,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class DefaultController {
+
     @RequestMapping("/**")
     public void unmappedRequest(HttpServletRequest request) {
+
         throw new UnknownResourceException(request.getRequestURI());
     }
 }

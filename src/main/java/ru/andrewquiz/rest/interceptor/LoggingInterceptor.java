@@ -10,12 +10,14 @@ import javax.servlet.http.HttpServletResponse;
  * Created by Andrew on 02.04.2017.
  */
 public class LoggingInterceptor extends HandlerInterceptorAdapter {
+
+    private Logger logger = Logger.getLogger(LoggingInterceptor.class);
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+
         logger.info("Request received: " + request.getMethod() + " " + request.getRequestURI());
 
         return true;
     }
 
-    private Logger logger = Logger.getLogger(LoggingInterceptor.class);
 }

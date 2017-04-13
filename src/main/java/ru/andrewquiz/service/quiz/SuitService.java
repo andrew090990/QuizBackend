@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.SuitEntity;
 import ru.andrewquiz.dto.quiz.Suit;
+import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.repository.quiz.SuitRepository;
 import ru.andrewquiz.rest.exception.EntityNotFoundException;
-import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 
 import java.util.List;
 
@@ -16,6 +16,10 @@ import java.util.List;
 
 @Service
 public class SuitService {
+
+    private SuitRepository repo;
+
+    private CustomDozerBeanMapper mapper;
 
     @Autowired
     public SuitService(SuitRepository repo, CustomDozerBeanMapper mapper) {
@@ -54,8 +58,4 @@ public class SuitService {
         return suit;
     }
 
-
-    private SuitRepository repo;
-
-    private CustomDozerBeanMapper mapper;
 }

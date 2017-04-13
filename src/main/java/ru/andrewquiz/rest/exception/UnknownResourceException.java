@@ -9,6 +9,12 @@ import ru.andrewquiz.dto.ExceptionCode;
 
 public class UnknownResourceException extends RestException {
 
+    private static final ExceptionCode CODE = ExceptionCode.UNKNOWN_RESOURCE;
+
+    private static final HttpStatus STATUS = HttpStatus.NOT_FOUND;
+
+    private String uri;
+
     public UnknownResourceException(String uri) {
         super("Resource not found: " + uri);
 
@@ -35,9 +41,4 @@ public class UnknownResourceException extends RestException {
         return getMessage();
     }
 
-    private static final ExceptionCode CODE = ExceptionCode.UNKNOWN_RESOURCE;
-
-    private static final HttpStatus STATUS = HttpStatus.NOT_FOUND;
-
-    private String uri;
 }

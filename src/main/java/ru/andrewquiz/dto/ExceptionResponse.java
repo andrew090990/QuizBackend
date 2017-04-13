@@ -10,6 +10,14 @@ import ru.andrewquiz.rest.exception.RestException;
 
 public class ExceptionResponse {
 
+    private int status;
+
+    private long code;
+
+    private String userMessage;
+
+    private String developerMessage;
+
     public ExceptionResponse (RestException ex) {
         this(ex.getStatus(), ex.getCode());
 
@@ -53,14 +61,5 @@ public class ExceptionResponse {
     public void setDeveloperMessage(String developerMessage) {
         this.developerMessage = developerMessage;
     }
-
-    private int status;
-
-    private long code;
-
-    private String userMessage;
-
-    private String developerMessage;
-
 
 }

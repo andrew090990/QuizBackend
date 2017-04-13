@@ -1,16 +1,14 @@
 package ru.andrewquiz.service.quiz;
 
-import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.CategoryEntity;
 import ru.andrewquiz.dto.quiz.Category;
+import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.repository.quiz.CategoryRepository;
 import ru.andrewquiz.rest.exception.EntityNotFoundException;
-import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.rest.exception.IllegalRequestException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +17,10 @@ import java.util.List;
 
 @Service
 public class CategoryService {
+
+    private CategoryRepository repo;
+
+    private CustomDozerBeanMapper mapper;
 
     @Autowired
     public CategoryService(CategoryRepository repo, CustomDozerBeanMapper mapper) {
@@ -98,8 +100,4 @@ public class CategoryService {
         repo.save(categoryEntity);
     }
 
-
-    private CategoryRepository repo;
-
-    private CustomDozerBeanMapper mapper;
 }

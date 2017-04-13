@@ -8,12 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.andrewquiz.dto.quiz.Category;
 import ru.andrewquiz.dto.quiz.Suit;
+import ru.andrewquiz.service.quiz.CategoryService;
+import ru.andrewquiz.service.quiz.SuitService;
 
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-
-import ru.andrewquiz.service.quiz.CategoryService;
-import ru.andrewquiz.service.quiz.SuitService;
 
 /**
  * Created by Andrew on 23.03.2017.
@@ -22,6 +21,12 @@ import ru.andrewquiz.service.quiz.SuitService;
 @Controller
 @RequestMapping("/categories")
 public class CategoryController {
+
+    private CategoryService categoryService;
+
+    private SuitService suitService;
+
+    private Logger logger = Logger.getLogger(CategoryController.class);
 
     @Autowired
     public CategoryController(CategoryService categoryService, SuitService suitService) {
@@ -71,11 +76,4 @@ public class CategoryController {
 
         return categoryService.getCategory(category.getId());
     }
-
-
-    private CategoryService categoryService;
-
-    private SuitService suitService;
-
-    private Logger logger = Logger.getLogger(CategoryController.class);
 }

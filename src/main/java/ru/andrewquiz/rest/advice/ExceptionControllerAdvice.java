@@ -1,6 +1,5 @@
 package ru.andrewquiz.rest.advice;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class ExceptionControllerAdvice {
+
+    private static Logger logger = Logger.getLogger(ExceptionControllerAdvice.class);
 
     @ExceptionHandler(value = RestException.class)
     protected ResponseEntity<ExceptionResponse> handleUnknownResourceException(RestException ex, HttpServletRequest request) {
@@ -45,6 +46,4 @@ public class ExceptionControllerAdvice {
 
         return new ResponseEntity<ExceptionResponse>(response, status);
     }
-
-    private static Logger logger = Logger.getLogger(ExceptionControllerAdvice.class);
 }

@@ -1,11 +1,15 @@
 package ru.andrewquiz.dto.quiz;
 
-import org.dozer.Mapping;
-
 /**
  * Created by Andrew on 25.03.2017.
  */
 public class Suit {
+
+    private Long id;
+
+    private String name;
+
+    private Long categoryId;
 
     public Long getId() {
         return id;
@@ -31,10 +35,4 @@ public class Suit {
         this.categoryId = categoryId;
     }
 
-
-    private Long id;
-
-    private String name;
-
-    private Long categoryId;
 }
