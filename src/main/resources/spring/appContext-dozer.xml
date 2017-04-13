@@ -5,13 +5,19 @@
     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
 
-    <bean id="mapper" class="ru.andrewquiz.util.mapper.CustomDozerBeanMapper" scope="singleton">
-        <!--<property name="mappingFiles">-->
-            <!--<list>-->
-                <!--<value>dozer-global-configuration.xml</value>-->
-                <!--<value>dozer-bean-mappings.xml</value>-->
-            <!--</list>-->
-        <!--</property>-->
+    <bean id="mapper" class="ru.andrewquiz.mapper.CustomDozerBeanMapper" scope="singleton">
+        <property name="mappingFiles">
+            <list>
+                <value>dozer/mapping-quiz.xml</value>
+            </list>
+        </property>
+        <property name="customConvertersWithId">
+            <map>
+                <entry key="LongCategoryConverter" value-ref="longCategoryConverter"/>
+            </map>
+        </property>
     </bean>
+
+    <bean id="longCategoryConverter" class="ru.andrewquiz.mapper.converter.quiz.LongCategoryConverter"/>
 
 </beans>

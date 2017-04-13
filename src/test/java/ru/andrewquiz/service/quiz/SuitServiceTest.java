@@ -1,6 +1,6 @@
 package ru.andrewquiz.service.quiz;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +34,7 @@ public class SuitServiceTest {
     private SuitRepository repo;
 
     @Autowired
-    private SuitEntity suitEntity;
+    private SuitEntity suitEntity1;
 
     @Before
     public void initMocks(){
@@ -44,12 +44,12 @@ public class SuitServiceTest {
     @Test
     public void testSuitService() {
         List<SuitEntity> list = new ArrayList<SuitEntity>();
-        list.add(suitEntity);
+        list.add(suitEntity1);
 
         when(repo.findByCategoryId(anyLong())).thenReturn(list);
 
-        List<Suit> result = suitService.getSuitsByCategoryId(1);
+        List<Suit> result = suitService.getSuitsByCategoryId(2L);
 
-        Assert.assertEquals(result.get(0).getName(), suitEntity.getName());
+        assertEquals(result.get(0).getName(), suitEntity1.getName());
     }
 }

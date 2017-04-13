@@ -1,13 +1,16 @@
 package ru.andrewquiz.service.quiz;
 
+import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.CategoryEntity;
 import ru.andrewquiz.dto.quiz.Category;
 import ru.andrewquiz.repository.quiz.CategoryRepository;
 import ru.andrewquiz.rest.exception.EntityNotFoundException;
-import ru.andrewquiz.util.mapper.CustomDozerBeanMapper;
+import ru.andrewquiz.mapper.CustomDozerBeanMapper;
+import ru.andrewquiz.rest.exception.IllegalRequestException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +19,12 @@ import java.util.List;
 
 @Service
 public class CategoryService {
+
+    @Autowired
+    public CategoryService(CategoryRepository repo, CustomDozerBeanMapper mapper) {
+        this.repo = repo;
+        this.mapper = mapper;
+    }
 
     public List<Category> getCategories() {
 
@@ -26,12 +35,21 @@ public class CategoryService {
         return categories;
     }
 
-    public Category getCategory(long id) {
+    public List<Category> getCategoriesByParentCategoryId(Long parentCategoryId) {
+
+        Iterable<CategoryEntity> categoryEntities = repo.findByParentCategoryId(parentCategoryId);
+
+        List<Category> categories = mapper.mapList(categoryEntities, Category.class);
+
+        return categories;
+    }
+
+    public Category getCategory(Long id) {
 
         CategoryEntity categoryEntity = repo.findOne(id);
 
         if (categoryEntity == null) {
-            throw new EntityNotFoundException("Cannot find category with id " + id);
+            throw new EntityNotFoundException(CategoryEntity.class, id);
         }
 
         Category category = mapper.map(categoryEntity, Category.class);
@@ -39,10 +57,49 @@ public class CategoryService {
         return category;
     }
 
+    public Long createCategory(Category category) {
 
-    @Autowired
+        //TODO validation
+
+        if (category.getId() != null) {
+            throw new IllegalRequestException("Id must be null when posting new resource.");
+        }
+
+        CategoryEntity categoryEntity = mapper.map(category, CategoryEntity.class);
+
+        repo.save(categoryEntity);
+
+        return categoryEntity.getId();
+    }
+
+    public void updateCategory(Category category) {
+
+        //TODO validation
+
+        if (!repo.exists(category.getId())) {
+            throw new EntityNotFoundException(CategoryEntity.class, category.getId());
+        }
+
+        CategoryEntity categoryEntity = mapper.map(category, CategoryEntity.class);
+
+        categoryEntity.setId(category.getId());
+
+        repo.save(categoryEntity);
+    }
+
+    public void patchCategory(Category category, List<String> nullFields) {
+
+        //TODO validation
+
+        CategoryEntity categoryEntity = repo.findOne(category.getId());
+
+        mapper.map(category, categoryEntity);
+
+        repo.save(categoryEntity);
+    }
+
+
     private CategoryRepository repo;
 
-    @Autowired
     private CustomDozerBeanMapper mapper;
 }

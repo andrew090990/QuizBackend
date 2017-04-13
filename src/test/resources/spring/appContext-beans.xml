@@ -5,20 +5,48 @@
     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
 
-    <bean id="categoryEntity" class="ru.andrewquiz.dao.quiz.CategoryEntity">
+    <bean id="categoryEntity1" class="ru.andrewquiz.dao.quiz.CategoryEntity">
         <property name="id" value="1"/>
-        <property name="name" value="Test Category"/>
-        <property name="suits">
+        <property name="name" value="Test Category 1"/>
+        <property name="childCategories">
             <list>
-                <ref bean="suitEntity"/>
+                <ref bean="categoryEntity2"/>
             </list>
         </property>
     </bean>
 
-    <bean id="suitEntity" class="ru.andrewquiz.dao.quiz.SuitEntity">
+    <bean id="categoryEntity2" class="ru.andrewquiz.dao.quiz.CategoryEntity">
+        <property name="id" value="2"/>
+        <property name="name" value="Test Category 2"/>
+        <property name="suits">
+            <list>
+                <ref bean="suitEntity1"/>
+            </list>
+        </property>
+        <property name="parentCategory" ref="categoryEntity1"/>
+    </bean>
+
+    <bean id="suitEntity1" class="ru.andrewquiz.dao.quiz.SuitEntity">
         <property name="id" value="1"/>
-        <property name="name" value="Test Suit"/>
-        <property name="category" ref="categoryEntity"/>
+        <property name="name" value="Test Suit 1"/>
+        <property name="category" ref="categoryEntity2"/>
+    </bean>
+
+    <bean id="category1" class="ru.andrewquiz.dto.quiz.Category">
+        <property name="id" value="1"/>
+        <property name="name" value="Test Category 1"/>
+    </bean>
+
+    <bean id="category2" class="ru.andrewquiz.dto.quiz.Category">
+        <property name="id" value="2"/>
+        <property name="name" value="Test Category 2"/>
+        <property name="parentCategoryId" value="1"/>
+    </bean>
+
+    <bean id="suit1" class="ru.andrewquiz.dto.quiz.Suit">
+        <property name="id" value="1"/>
+        <property name="categoryId" value="2"/>
+        <property name="name" value="Test Suit 2"/>
     </bean>
 
 </beans>

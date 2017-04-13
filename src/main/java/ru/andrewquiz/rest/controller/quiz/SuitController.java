@@ -22,6 +22,11 @@ import java.util.List;
 @RequestMapping("/suits")
 public class SuitController {
 
+    @Autowired
+    public SuitController(SuitService suitService) {
+        this.suitService = suitService;
+    }
+
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
     public @ResponseBody List<Suit> getAllSuits() {
 
@@ -35,7 +40,6 @@ public class SuitController {
     }
 
 
-    @Autowired
     private SuitService suitService;
 
     private Logger logger = Logger.getLogger(SuitController.class);

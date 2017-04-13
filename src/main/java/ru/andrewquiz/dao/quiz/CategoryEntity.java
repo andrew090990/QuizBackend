@@ -12,11 +12,11 @@ import java.util.List;
 @Entity
 @Table(name = "categories")
 public class CategoryEntity {
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -36,15 +36,39 @@ public class CategoryEntity {
         this.suits = suits;
     }
 
+    public CategoryEntity getParentCategory() {
+        return parentCategory;
+    }
+
+    public void setParentCategory(CategoryEntity parentCategory) {
+        this.parentCategory = parentCategory;
+    }
+
+    public List<CategoryEntity> getChildCategories() {
+        return childCategories;
+    }
+
+    public void setChildCategories(List<CategoryEntity> childCategories) {
+        this.childCategories = childCategories;
+    }
+
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    private long id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private CategoryEntity parentCategory;
+
     @OneToMany(mappedBy = "category")
     private List<SuitEntity> suits;
+
+    @OneToMany(mappedBy = "parentCategory")
+    private List<CategoryEntity> childCategories;
 
 }

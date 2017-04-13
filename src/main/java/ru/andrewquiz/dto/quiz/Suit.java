@@ -1,10 +1,13 @@
 package ru.andrewquiz.dto.quiz;
 
+import org.dozer.Mapping;
+
 /**
  * Created by Andrew on 25.03.2017.
  */
 public class Suit {
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
 
@@ -16,12 +19,22 @@ public class Suit {
         this.name = name;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
+    public Long getCategoryId() {
+        return categoryId;
+    }
 
-    private long id;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+
+    private Long id;
 
     private String name;
+
+    private Long categoryId;
 }

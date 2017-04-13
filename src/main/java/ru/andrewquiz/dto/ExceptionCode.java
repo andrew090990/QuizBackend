@@ -9,6 +9,7 @@ public enum ExceptionCode {
     //4xx
     CLIENT_ERROR(400000),
     ENTITY_NOT_FOUND(400010),
+    ILLEGAL_REQUEST(400020),
     UNKNOWN_RESOURCE(404000),
 
     //5xx

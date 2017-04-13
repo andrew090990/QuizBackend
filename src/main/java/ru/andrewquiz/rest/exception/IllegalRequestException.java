@@ -4,17 +4,12 @@ import org.springframework.http.HttpStatus;
 import ru.andrewquiz.dto.ExceptionCode;
 
 /**
- * Created by Andrew on 09.04.2017.
+ * Created by Andrew on 13.04.2017.
  */
+public class IllegalRequestException extends RestException {
 
-public class EntityNotFoundException extends RestException {
-
-    public EntityNotFoundException(String msg) {
+    public IllegalRequestException(String msg) {
         super(msg);
-    }
-
-    public EntityNotFoundException(Class entityClass, Long id) {
-        this("Couldn't find " + entityClass.getSimpleName() + " with id: " + String.valueOf(id) + ".");
     }
 
     @Override
@@ -34,10 +29,10 @@ public class EntityNotFoundException extends RestException {
 
     @Override
     public String getUserMessage() {
-        return getMessage();
+        return "Illegal request";
     }
 
-    private static final ExceptionCode CODE = ExceptionCode.ENTITY_NOT_FOUND;
+    private static final ExceptionCode CODE = ExceptionCode.ILLEGAL_REQUEST;
 
     private static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
 }

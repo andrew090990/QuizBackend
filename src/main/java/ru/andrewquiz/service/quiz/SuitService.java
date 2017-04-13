@@ -6,7 +6,7 @@ import ru.andrewquiz.dao.quiz.SuitEntity;
 import ru.andrewquiz.dto.quiz.Suit;
 import ru.andrewquiz.repository.quiz.SuitRepository;
 import ru.andrewquiz.rest.exception.EntityNotFoundException;
-import ru.andrewquiz.util.mapper.CustomDozerBeanMapper;
+import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 
 import java.util.List;
 
@@ -17,6 +17,12 @@ import java.util.List;
 @Service
 public class SuitService {
 
+    @Autowired
+    public SuitService(SuitRepository repo, CustomDozerBeanMapper mapper) {
+        this.repo = repo;
+        this.mapper = mapper;
+    }
+
     public List<Suit> getSuits() {
 
         Iterable<SuitEntity> suitEntities = repo.findAll();
@@ -26,7 +32,7 @@ public class SuitService {
         return suits;
     }
 
-    public List<Suit> getSuitsByCategoryId(long categoryId) {
+    public List<Suit> getSuitsByCategoryId(Long categoryId) {
 
         Iterable<SuitEntity> suitEntities = repo.findByCategoryId(categoryId);
 
@@ -35,12 +41,12 @@ public class SuitService {
         return suits;
     }
 
-    public Suit getSuit(long id) {
+    public Suit getSuit(Long id) {
 
         SuitEntity suitEntity = repo.findOne(id);
 
         if (suitEntity == null) {
-            throw new EntityNotFoundException("Cannot find suit with id = " + id);
+            throw new EntityNotFoundException(SuitEntity.class, id);
         }
 
         Suit suit = mapper.map(suitEntity, Suit.class);
@@ -49,9 +55,7 @@ public class SuitService {
     }
 
 
-    @Autowired
     private SuitRepository repo;
 
-    @Autowired
     private CustomDozerBeanMapper mapper;
 }
