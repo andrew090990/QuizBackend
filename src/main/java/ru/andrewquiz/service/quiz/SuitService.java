@@ -23,6 +23,7 @@ public class SuitService {
 
     @Autowired
     public SuitService(SuitRepository repo, CustomDozerBeanMapper mapper) {
+
         this.repo = repo;
         this.mapper = mapper;
     }

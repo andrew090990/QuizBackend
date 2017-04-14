@@ -27,9 +27,9 @@ public class CategoryService {
 
     @Autowired
     public CategoryService(CategoryRepository repo, CustomDozerBeanMapper mapper) {
+
         this.repo = repo;
         this.mapper = mapper;
-
     }
 
     public List<Category> getCategories() {

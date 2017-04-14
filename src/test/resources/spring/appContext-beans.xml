@@ -11,17 +11,36 @@
         <property name="childCategories">
             <list>
                 <ref bean="categoryEntity2"/>
+                <ref bean="categoryEntity3"/>
             </list>
+        </property>
+        <property name="suits">
+            <list/>
         </property>
     </bean>
 
     <bean id="categoryEntity2" class="ru.andrewquiz.dao.quiz.CategoryEntity">
         <property name="id" value="2"/>
         <property name="name" value="Test Category 2"/>
+        <property name="childCategories">
+            <list/>
+        </property>
         <property name="suits">
             <list>
                 <ref bean="suitEntity1"/>
             </list>
+        </property>
+        <property name="parentCategory" ref="categoryEntity1"/>
+    </bean>
+
+    <bean id="categoryEntity3" class="ru.andrewquiz.dao.quiz.CategoryEntity">
+        <property name="id" value="3"/>
+        <property name="name" value="Test Category 3"/>
+        <property name="childCategories">
+            <list/>
+        </property>
+        <property name="suits">
+            <list/>
         </property>
         <property name="parentCategory" ref="categoryEntity1"/>
     </bean>
@@ -40,6 +59,12 @@
     <bean id="category2" class="ru.andrewquiz.dto.quiz.Category">
         <property name="id" value="2"/>
         <property name="name" value="Test Category 2"/>
+        <property name="parentCategoryId" value="1"/>
+    </bean>
+
+    <bean id="category3" class="ru.andrewquiz.dto.quiz.Category">
+        <property name="id" value="3"/>
+        <property name="name" value="Test Category 3"/>
         <property name="parentCategoryId" value="1"/>
     </bean>
 
