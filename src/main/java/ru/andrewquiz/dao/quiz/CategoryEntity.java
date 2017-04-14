@@ -27,9 +27,11 @@ public class CategoryEntity {
     @Column(name = "description")
     private String description;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private Calendar createdAt;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Calendar updatedAt;
 

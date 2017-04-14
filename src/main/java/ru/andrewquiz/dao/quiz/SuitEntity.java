@@ -23,9 +23,11 @@ public class SuitEntity {
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private Calendar createdAt;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Calendar updatedAt;
 
