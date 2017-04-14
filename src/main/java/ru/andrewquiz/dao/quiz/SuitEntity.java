@@ -1,6 +1,7 @@
 package ru.andrewquiz.dao.quiz;
 
 import javax.persistence.*;
+import java.util.Calendar;
 
 /**
  * Created by Andrew on 25.03.2017.
@@ -21,6 +22,12 @@ public class SuitEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
+
+    @Column(name = "created_at")
+    private Calendar createdAt;
+
+    @Column(name = "updated_at")
+    private Calendar updatedAt;
 
     public Long getId() {
         return id;
@@ -44,6 +51,22 @@ public class SuitEntity {
 
     public void setCategory(CategoryEntity category) {
         this.category = category;
+    }
+
+    public Calendar getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Calendar createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Calendar getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Calendar updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }

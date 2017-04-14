@@ -1,6 +1,8 @@
 package ru.andrewquiz.dto.quiz;
 
 
+import java.util.Calendar;
+
 public class Category {
 
     private Long id;
@@ -8,6 +10,12 @@ public class Category {
     private String name;
 
     private Long parentCategoryId;
+
+    private String description;
+
+    private Calendar createdAt;
+
+    private Calendar updatedAt;
 
     public Long getId() {
         return id;
@@ -33,4 +41,27 @@ public class Category {
         this.parentCategoryId = parentCategoryId;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Calendar getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Calendar createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Calendar getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Calendar updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

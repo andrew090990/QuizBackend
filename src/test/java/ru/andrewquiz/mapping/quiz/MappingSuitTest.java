@@ -12,12 +12,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.andrewquiz.dao.quiz.CategoryEntity;
 import ru.andrewquiz.dao.quiz.SuitEntity;
-import ru.andrewquiz.dto.quiz.Category;
 import ru.andrewquiz.dto.quiz.Suit;
 import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.mapper.converter.quiz.LongCategoryConverter;
 import ru.andrewquiz.repository.quiz.CategoryRepository;
-import ru.andrewquiz.repository.quiz.SuitRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,14 +75,17 @@ public class MappingSuitTest {
 
         SuitEntity suitEntity = mapper.map(suit1, SuitEntity.class);
 
-        assertEquals("name must be equal; name = " + String.valueOf(suitEntity.getName()),
-                suit1.getName(), suitEntity.getName());
-
         assertEquals("category.id must be equal to categoryId",
                 suit1.getCategoryId(), suitEntity.getCategory().getId());
 
         assertTrue("id must be null; id = " + String.valueOf(suitEntity.getId()),
                 suitEntity.getId() == null);
+
+        assertTrue("createdAt must be null; createdAt = " + String.valueOf(suitEntity.getCreatedAt()),
+                suitEntity.getCreatedAt() == null);
+
+        assertTrue("updatedAt must be null; updatedAt = " + String.valueOf(suitEntity.getUpdatedAt()),
+                suitEntity.getUpdatedAt() == null);
 
     }
 
@@ -93,14 +94,17 @@ public class MappingSuitTest {
 
         Suit suit = mapper.map(suitEntity1, Suit.class);
 
-        assertEquals("name must be equal; name = " + String.valueOf(suit.getName()),
-                suitEntity1.getName(), suit.getName());
-
         assertEquals("categoryId must be equal to category.id",
                 suitEntity1.getCategory().getId(), suit.getCategoryId());
 
         assertEquals("id must be equal; id = " + String.valueOf(suit.getId()),
                 suitEntity1.getId(), suit.getId());
+
+        assertEquals("createdAt must be equal; createdAt = " + String.valueOf(suit.getCreatedAt()),
+                suitEntity1.getCreatedAt(), suit.getCreatedAt());
+
+        assertEquals("updatedAt must be equal; updatedAt = " + String.valueOf(suit.getUpdatedAt()),
+                suitEntity1.getUpdatedAt(), suit.getUpdatedAt());
 
     }
 }

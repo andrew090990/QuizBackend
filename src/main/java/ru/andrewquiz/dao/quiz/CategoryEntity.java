@@ -1,6 +1,7 @@
 package ru.andrewquiz.dao.quiz;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -22,6 +23,15 @@ public class CategoryEntity {
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private CategoryEntity parentCategory;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "created_at")
+    private Calendar createdAt;
+
+    @Column(name = "updated_at")
+    private Calendar updatedAt;
 
     @OneToMany(mappedBy = "category")
     private List<SuitEntity> suits;
@@ -67,6 +77,30 @@ public class CategoryEntity {
 
     public void setChildCategories(List<CategoryEntity> childCategories) {
         this.childCategories = childCategories;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Calendar getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Calendar createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Calendar getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Calendar updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }

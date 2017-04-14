@@ -20,6 +20,14 @@
             <a>id</a>
             <b>id</b>
         </field-exclude>
+        <field-exclude>
+            <a>createdAt</a>
+            <b>createdAt</b>
+        </field-exclude>
+        <field-exclude>
+            <a>updatedAt</a>
+            <b>updatedAt</b>
+        </field-exclude>
     </mapping>
 
     <mapping type="one-way">
@@ -41,6 +49,14 @@
         <field-exclude>
             <a>id</a>
             <b>id</b>
+        </field-exclude>
+        <field-exclude>
+            <a>createdAt</a>
+            <b>createdAt</b>
+        </field-exclude>
+        <field-exclude>
+            <a>updatedAt</a>
+            <b>updatedAt</b>
         </field-exclude>
     </mapping>
 

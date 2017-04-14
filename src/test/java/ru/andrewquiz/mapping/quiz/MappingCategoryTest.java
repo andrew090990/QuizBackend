@@ -1,10 +1,7 @@
 package ru.andrewquiz.mapping.quiz;
 
-import static org.junit.Assert.*;
-
 import org.dozer.CustomConverter;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -22,7 +19,10 @@ import ru.andrewquiz.repository.quiz.CategoryRepository;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Andrew on 12.04.2017.
@@ -74,14 +74,17 @@ public class MappingCategoryTest {
 
         CategoryEntity categoryEntity = mapper.map(category2, CategoryEntity.class);
 
-        assertEquals("name must be equal; name = " + String.valueOf(categoryEntity.getName()),
-                category2.getName(), categoryEntity.getName());
-
         assertEquals("parentCategory.id must be equal to parentCategoryId",
                 category2.getParentCategoryId(), categoryEntity.getParentCategory().getId());
 
         assertTrue("id must be null; id = " + String.valueOf(categoryEntity.getId()),
                 categoryEntity.getId() == null);
+
+        assertTrue("createdAt must be null; createdAt = " + String.valueOf(categoryEntity.getCreatedAt()),
+                categoryEntity.getCreatedAt() == null);
+
+        assertTrue("updatedAt must be null; updatedAt = " + String.valueOf(categoryEntity.getUpdatedAt()),
+                categoryEntity.getUpdatedAt() == null);
 
     }
 
@@ -90,14 +93,17 @@ public class MappingCategoryTest {
 
         Category category = mapper.map(categoryEntity2, Category.class);
 
-        assertEquals("name must be equal; name = " + String.valueOf(category.getName()),
-                categoryEntity2.getName(), category.getName());
-
         assertEquals("parentCategoryId must be equal to parentCategory.id",
                 categoryEntity2.getParentCategory().getId(), category.getParentCategoryId());
 
         assertEquals("id must be equal; id = " + String.valueOf(category.getId()),
                 categoryEntity2.getId(), category.getId());
+
+        assertEquals("createdAt must be equal; createdAt = " + String.valueOf(category.getCreatedAt()),
+                categoryEntity2.getCreatedAt(), category.getCreatedAt());
+
+        assertEquals("updatedAt must be equal; updatedAt = " + String.valueOf(category.getUpdatedAt()),
+                categoryEntity2.getUpdatedAt(), category.getUpdatedAt());
 
     }
 }
