@@ -7,6 +7,7 @@
     <configuration>
         <stop-on-errors>true</stop-on-errors>
         <wildcard>true</wildcard>
+        <map-null>false</map-null>
     </configuration>
 
     <mapping type="one-way">

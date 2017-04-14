@@ -3,12 +3,15 @@ package ru.andrewquiz.service.quiz;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.CategoryEntity;
+import ru.andrewquiz.dao.quiz.SuitEntity;
 import ru.andrewquiz.dto.quiz.Category;
 import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.repository.quiz.CategoryRepository;
 import ru.andrewquiz.rest.exception.EntityNotFoundException;
+import ru.andrewquiz.rest.exception.IllegalDeletionException;
 import ru.andrewquiz.rest.exception.IllegalRequestException;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -26,6 +29,7 @@ public class CategoryService {
     public CategoryService(CategoryRepository repo, CustomDozerBeanMapper mapper) {
         this.repo = repo;
         this.mapper = mapper;
+
     }
 
     public List<Category> getCategories() {
@@ -48,11 +52,7 @@ public class CategoryService {
 
     public Category getCategory(Long id) {
 
-        CategoryEntity categoryEntity = repo.findOne(id);
-
-        if (categoryEntity == null) {
-            throw new EntityNotFoundException(CategoryEntity.class, id);
-        }
+        CategoryEntity categoryEntity = findCategory(id);
 
         Category category = mapper.map(categoryEntity, Category.class);
 
@@ -69,35 +69,72 @@ public class CategoryService {
 
         CategoryEntity categoryEntity = mapper.map(category, CategoryEntity.class);
 
+        categoryEntity.setCreatedAt(Calendar.getInstance());
+
         repo.save(categoryEntity);
 
         return categoryEntity.getId();
     }
 
-    public void updateCategory(Category category) {
+    public void updateCategory(Category category, Long id) {
 
         //TODO validation
 
         if (!repo.exists(category.getId())) {
-            throw new EntityNotFoundException(CategoryEntity.class, category.getId());
+            throw new EntityNotFoundException(CategoryEntity.class,id);
         }
 
         CategoryEntity categoryEntity = mapper.map(category, CategoryEntity.class);
 
-        categoryEntity.setId(category.getId());
+        categoryEntity.setId(id);
+
+        categoryEntity.setUpdatedAt(Calendar.getInstance());
 
         repo.save(categoryEntity);
     }
 
-    public void patchCategory(Category category, List<String> nullFields) {
+    public void deleteCategory(long id) {
 
-        //TODO validation
+        CategoryEntity categoryEntity = findCategory(id);
 
-        CategoryEntity categoryEntity = repo.findOne(category.getId());
+        validateReferentialIntegrity(categoryEntity);
 
-        mapper.map(category, categoryEntity);
-
-        repo.save(categoryEntity);
+        repo.delete(categoryEntity);
     }
 
+    private void validateReferentialIntegrity(CategoryEntity categoryEntity) {
+
+        IllegalDeletionException e = null;
+
+        for (CategoryEntity childCategoryEntity : categoryEntity.getChildCategories()) {
+            if (e == null) {
+                e = new IllegalDeletionException();
+            }
+
+            e.addDependentObject("category", childCategoryEntity.getId(), childCategoryEntity.getName());
+        }
+
+        for (SuitEntity suit : categoryEntity.getSuits()) {
+            if (e == null) {
+                e = new IllegalDeletionException();
+            }
+
+            e.addDependentObject("suit", suit.getId(), suit.getName());
+        }
+
+        if (e != null) {
+            throw e;
+        }
+    }
+
+    private CategoryEntity findCategory(Long id) {
+
+        CategoryEntity categoryEntity = repo.findOne(id);
+
+        if (categoryEntity == null) {
+            throw new EntityNotFoundException(CategoryEntity.class, id);
+        }
+
+        return categoryEntity;
+    }
 }

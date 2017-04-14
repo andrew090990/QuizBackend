@@ -3,6 +3,7 @@ package ru.andrewquiz.rest.controller.quiz;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -69,11 +70,19 @@ public class CategoryController {
     }
 
     @Transactional
-    @RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
-    public @ResponseBody Category putCategory(@RequestBody Category category) {
+    @RequestMapping(value = "{categoryId:\\d+}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+    public @ResponseBody Category putCategory(@RequestBody Category category, @PathVariable long categoryId) {
 
-        categoryService.updateCategory(category);
+        categoryService.updateCategory(category, categoryId);
 
         return categoryService.getCategory(category.getId());
+    }
+
+    @Transactional
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping(value = "{categoryId:\\d+}", method = RequestMethod.DELETE)
+    public void deleteCategory(@PathVariable long categoryId) {
+
+        categoryService.deleteCategory(categoryId);
     }
 }
