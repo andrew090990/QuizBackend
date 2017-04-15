@@ -17,7 +17,7 @@ public class EntityNotFoundException extends RestException {
         super(msg);
     }
 
-    public EntityNotFoundException(Class entityClass, Long id) {
+    public EntityNotFoundException(Class entityClass, Object id) {
         this("Couldn't find " + entityClass.getSimpleName() + " with id: " + String.valueOf(id) + ".");
     }
 

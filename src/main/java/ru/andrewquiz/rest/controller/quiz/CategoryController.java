@@ -38,13 +38,13 @@ public class CategoryController {
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
     public @ResponseBody List<Category> getAllCategories() {
 
-        return categoryService.getCategories();
+        return categoryService.getAllDtos();
     }
 
     @RequestMapping(value = "{categoryId:\\d+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
     public @ResponseBody Category getCategory(@PathVariable long categoryId) {
 
-        return categoryService.getCategory(categoryId);
+        return categoryService.getDto(categoryId);
     }
 
 //    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
@@ -64,18 +64,18 @@ public class CategoryController {
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     public @ResponseBody Category postCategory(@RequestBody Category category) {
 
-        Long id = categoryService.createCategory(category);
+        Long id = categoryService.createEntity(category);
 
-        return categoryService.getCategory(id);
+        return categoryService.getDto(id);
     }
 
     @Transactional
     @RequestMapping(value = "{categoryId:\\d+}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     public @ResponseBody Category putCategory(@RequestBody Category category, @PathVariable long categoryId) {
 
-        categoryService.updateCategory(category, categoryId);
+        categoryService.updateEntity(category, categoryId);
 
-        return categoryService.getCategory(category.getId());
+        return categoryService.getDto(categoryId);
     }
 
     @Transactional
@@ -83,6 +83,6 @@ public class CategoryController {
     @RequestMapping(value = "{categoryId:\\d+}", method = RequestMethod.DELETE)
     public void deleteCategory(@PathVariable long categoryId) {
 
-        categoryService.deleteCategory(categoryId);
+        categoryService.deleteEntity(categoryId);
     }
 }

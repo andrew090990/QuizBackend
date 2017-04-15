@@ -1,15 +1,15 @@
 package ru.andrewquiz.service.quiz;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.SuitEntity;
 import ru.andrewquiz.dto.quiz.Suit;
 import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.repository.quiz.SuitRepository;
-import ru.andrewquiz.rest.exception.EntityNotFoundException;
-import ru.andrewquiz.rest.exception.IllegalRequestException;
+import ru.andrewquiz.service.AbstractResourceService;
+import ru.andrewquiz.service.Validator;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -17,26 +17,20 @@ import java.util.List;
  */
 
 @Service
-public class SuitService {
+public class SuitService extends AbstractResourceService<Suit, SuitEntity, Long> {
 
     private SuitRepository repo;
 
     private CustomDozerBeanMapper mapper;
 
+    private SuitValidator validator;
+
     @Autowired
-    public SuitService(SuitRepository repo, CustomDozerBeanMapper mapper) {
+    public SuitService(SuitRepository repo, CustomDozerBeanMapper mapper, SuitValidator validator) {
 
         this.repo = repo;
         this.mapper = mapper;
-    }
-
-    public List<Suit> getSuits() {
-
-        Iterable<SuitEntity> suitEntities = repo.findAll();
-
-        List<Suit> suits = mapper.mapList(suitEntities, Suit.class);
-
-        return suits;
+        this.validator = validator;
     }
 
     public List<Suit> getSuitsByCategoryId(Long categoryId) {
@@ -48,72 +42,29 @@ public class SuitService {
         return suits;
     }
 
-    public Suit getSuit(Long id) {
-
-        SuitEntity suitEntity = findSuitEntity(id);
-
-        Suit suit = mapper.map(suitEntity, Suit.class);
-
-        return suit;
+    @Override
+    protected Class<Suit> getDtoClass() {
+        return Suit.class;
     }
 
-    public Long createSuit(Suit suit) {
-
-        //TODO validation
-
-        if (suit.getId() != null) {
-            throw new IllegalRequestException("Id must be null when posting new resource.");
-        }
-
-        SuitEntity suitEntity = mapper.map(suit, SuitEntity.class);
-
-        suitEntity.setCreatedAt(Calendar.getInstance());
-
-        repo.save(suitEntity);
-
-        return suitEntity.getId();
+    @Override
+    protected Class<SuitEntity> getEntityClass() {
+        return SuitEntity.class;
     }
 
-    public void updateSuit(Suit suit, Long id) {
-
-        //TODO validation
-
-        if (!repo.exists(suit.getId())) {
-            throw new EntityNotFoundException(SuitEntity.class,id);
-        }
-
-        SuitEntity suitEntity = mapper.map(suit, SuitEntity.class);
-
-        suitEntity.setId(id);
-
-        suitEntity.setUpdatedAt(Calendar.getInstance());
-
-        repo.save(suitEntity);
+    @Override
+    protected CrudRepository<SuitEntity, Long> getRepo() {
+        return repo;
     }
 
-    public void deleteSuit(long id) {
-
-        SuitEntity suitEntity = findSuitEntity(id);
-
-        validateReferentialIntegrity(suitEntity);
-
-        repo.delete(suitEntity);
+    @Override
+    protected Validator<Suit, SuitEntity> getValidator() {
+        return validator;
     }
 
-    private void validateReferentialIntegrity(SuitEntity suitEntity) {
-        return;
-    }
-
-
-    private SuitEntity findSuitEntity (Long id) {
-
-        SuitEntity suitEntity = repo.findOne(id);
-
-        if (suitEntity == null) {
-            throw new EntityNotFoundException(SuitEntity.class, id);
-        }
-
-        return suitEntity;
+    @Override
+    protected CustomDozerBeanMapper getMapper() {
+        return mapper;
     }
 
 }

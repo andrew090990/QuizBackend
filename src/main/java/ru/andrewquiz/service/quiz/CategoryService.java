@@ -1,17 +1,15 @@
 package ru.andrewquiz.service.quiz;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.CategoryEntity;
-import ru.andrewquiz.dao.quiz.SuitEntity;
 import ru.andrewquiz.dto.quiz.Category;
 import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.repository.quiz.CategoryRepository;
-import ru.andrewquiz.rest.exception.EntityNotFoundException;
-import ru.andrewquiz.rest.exception.IllegalDeletionException;
-import ru.andrewquiz.rest.exception.IllegalRequestException;
+import ru.andrewquiz.service.AbstractResourceService;
+import ru.andrewquiz.service.Validator;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -19,26 +17,20 @@ import java.util.List;
  */
 
 @Service
-public class CategoryService {
+public class CategoryService extends AbstractResourceService<Category, CategoryEntity, Long> {
 
     private CategoryRepository repo;
 
     private CustomDozerBeanMapper mapper;
 
+    private CategoryValidator validator;
+
     @Autowired
-    public CategoryService(CategoryRepository repo, CustomDozerBeanMapper mapper) {
+    public CategoryService(CategoryRepository repo, CustomDozerBeanMapper mapper, CategoryValidator validator) {
 
         this.repo = repo;
         this.mapper = mapper;
-    }
-
-    public List<Category> getCategories() {
-
-        Iterable<CategoryEntity> categoryEntities = repo.findAll();
-
-        List<Category> categories = mapper.mapList(categoryEntities, Category.class);
-
-        return categories;
+        this.validator = validator;
     }
 
     public List<Category> getCategoriesByParentCategoryId(Long parentCategoryId) {
@@ -50,91 +42,28 @@ public class CategoryService {
         return categories;
     }
 
-    public Category getCategory(Long id) {
-
-        CategoryEntity categoryEntity = findCategoryEntity(id);
-
-        Category category = mapper.map(categoryEntity, Category.class);
-
-        return category;
+    @Override
+    protected Class<Category> getDtoClass() {
+        return Category.class;
     }
 
-    public Long createCategory(Category category) {
-
-        //TODO validation
-
-        if (category.getId() != null) {
-            throw new IllegalRequestException("Id must be null when posting new resource.");
-        }
-
-        CategoryEntity categoryEntity = mapper.map(category, CategoryEntity.class);
-
-        categoryEntity.setCreatedAt(Calendar.getInstance());
-
-        repo.save(categoryEntity);
-
-        return categoryEntity.getId();
+    @Override
+    protected Class<CategoryEntity> getEntityClass() {
+        return CategoryEntity.class;
     }
 
-    public void updateCategory(Category category, Long id) {
-
-        //TODO validation
-
-        if (!repo.exists(category.getId())) {
-            throw new EntityNotFoundException(CategoryEntity.class,id);
-        }
-
-        CategoryEntity categoryEntity = mapper.map(category, CategoryEntity.class);
-
-        categoryEntity.setId(id);
-
-        categoryEntity.setUpdatedAt(Calendar.getInstance());
-
-        repo.save(categoryEntity);
+    @Override
+    protected CrudRepository<CategoryEntity, Long> getRepo() {
+        return repo;
     }
 
-    public void deleteCategory(long id) {
-
-        CategoryEntity categoryEntity = findCategoryEntity(id);
-
-        validateReferentialIntegrity(categoryEntity);
-
-        repo.delete(categoryEntity);
+    @Override
+    protected Validator<Category, CategoryEntity> getValidator() {
+        return validator;
     }
 
-    private void validateReferentialIntegrity(CategoryEntity categoryEntity) {
-
-        IllegalDeletionException e = null;
-
-        for (CategoryEntity childCategoryEntity : categoryEntity.getChildCategories()) {
-            if (e == null) {
-                e = new IllegalDeletionException();
-            }
-
-            e.addDependentObject("category", childCategoryEntity.getId(), childCategoryEntity.getName());
-        }
-
-        for (SuitEntity suit : categoryEntity.getSuits()) {
-            if (e == null) {
-                e = new IllegalDeletionException();
-            }
-
-            e.addDependentObject("suit", suit.getId(), suit.getName());
-        }
-
-        if (e != null) {
-            throw e;
-        }
-    }
-
-    private CategoryEntity findCategoryEntity(Long id) {
-
-        CategoryEntity categoryEntity = repo.findOne(id);
-
-        if (categoryEntity == null) {
-            throw new EntityNotFoundException(CategoryEntity.class, id);
-        }
-
-        return categoryEntity;
+    @Override
+    protected CustomDozerBeanMapper getMapper() {
+        return mapper;
     }
 }

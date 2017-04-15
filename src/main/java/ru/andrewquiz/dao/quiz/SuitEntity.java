@@ -1,5 +1,7 @@
 package ru.andrewquiz.dao.quiz;
 
+import ru.andrewquiz.dao.AbstractEntity;
+
 import javax.persistence.*;
 import java.util.Calendar;
 
@@ -9,7 +11,7 @@ import java.util.Calendar;
 
 @Entity
 @Table(name = "suits")
-public class SuitEntity {
+public class SuitEntity extends AbstractEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +33,12 @@ public class SuitEntity {
     @Column(name = "updated_at")
     private Calendar updatedAt;
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -55,18 +59,22 @@ public class SuitEntity {
         this.category = category;
     }
 
+    @Override
     public Calendar getCreatedAt() {
         return createdAt;
     }
 
+    @Override
     public void setCreatedAt(Calendar createdAt) {
         this.createdAt = createdAt;
     }
 
+    @Override
     public Calendar getUpdatedAt() {
         return updatedAt;
     }
 
+    @Override
     public void setUpdatedAt(Calendar updatedAt) {
         this.updatedAt = updatedAt;
     }

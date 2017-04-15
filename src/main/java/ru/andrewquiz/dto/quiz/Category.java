@@ -1,9 +1,11 @@
 package ru.andrewquiz.dto.quiz;
 
 
+import ru.andrewquiz.dto.AbstractDto;
+
 import java.util.Calendar;
 
-public class Category {
+public class Category extends AbstractDto {
 
     private Long id;
 
@@ -17,6 +19,7 @@ public class Category {
 
     private Calendar updatedAt;
 
+    @Override
     public Long getId() {
         return id;
     }

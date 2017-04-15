@@ -1,11 +1,13 @@
 package ru.andrewquiz.dto.quiz;
 
+import ru.andrewquiz.dto.AbstractDto;
+
 import java.util.Calendar;
 
 /**
  * Created by Andrew on 25.03.2017.
  */
-public class Suit {
+public class Suit extends AbstractDto {
 
     private Long id;
 
@@ -17,6 +19,7 @@ public class Suit {
 
     private Calendar updatedAt;
 
+    @Override
     public Long getId() {
         return id;
     }

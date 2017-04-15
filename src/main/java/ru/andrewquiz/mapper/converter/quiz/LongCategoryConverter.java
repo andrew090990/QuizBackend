@@ -12,12 +12,13 @@ import ru.andrewquiz.repository.quiz.CategoryRepository;
 @Component
 public class LongCategoryConverter extends AbstractLongEntityConverter {
 
+    @Autowired
     private CategoryRepository repo;
 
-    @Autowired
-    public LongCategoryConverter(CategoryRepository repo) {
-        this.repo = repo;
-    }
+//    @Autowired
+//    public LongCategoryConverter(CategoryRepository repo) {
+//        this.repo = repo;
+//    }
 
     @Override
     protected Object convertLongToEntity(Long id) {

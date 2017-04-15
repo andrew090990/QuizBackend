@@ -53,7 +53,7 @@ public class CategoryServiceTest {
 
         when(repo.findOne(anyLong())).thenReturn(null);
 
-        Category category = categoryService.getCategory(1L);
+        Category category = categoryService.getDto(1L);
     }
 
     @Test(expected = EntityNotFoundException.class)
@@ -61,7 +61,7 @@ public class CategoryServiceTest {
 
         when(repo.findOne(anyLong())).thenReturn(null);
 
-        categoryService.deleteCategory(1L);
+        categoryService.deleteEntity(1L);
     }
 
     @Test(expected = IllegalDeletionException.class)
@@ -69,7 +69,7 @@ public class CategoryServiceTest {
 
         when(repo.findOne(categoryEntity1.getId())).thenReturn(categoryEntity1);
 
-       categoryService.deleteCategory(categoryEntity1.getId());
+       categoryService.deleteEntity(categoryEntity1.getId());
     }
 
     @Test(expected = IllegalDeletionException.class)
@@ -77,7 +77,7 @@ public class CategoryServiceTest {
 
         when(repo.findOne(categoryEntity2.getId())).thenReturn(categoryEntity2);
 
-        categoryService.deleteCategory(categoryEntity2.getId());
+        categoryService.deleteEntity(categoryEntity2.getId());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class CategoryServiceTest {
 
         when(repo.findOne(categoryEntity3.getId())).thenReturn(categoryEntity3);
 
-        categoryService.deleteCategory(categoryEntity3.getId());
+        categoryService.deleteEntity(categoryEntity3.getId());
 
         assertTrue(true);
     }
