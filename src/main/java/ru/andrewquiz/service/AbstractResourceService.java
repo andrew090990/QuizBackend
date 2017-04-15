@@ -2,6 +2,7 @@ package ru.andrewquiz.service;
 
 import org.springframework.data.repository.CrudRepository;
 import ru.andrewquiz.dao.AbstractEntity;
+import ru.andrewquiz.dao.Trackable;
 import ru.andrewquiz.dto.AbstractDto;
 import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.rest.exception.EntityNotFoundException;
@@ -55,7 +56,9 @@ public abstract class AbstractResourceService<D extends AbstractDto, E extends A
 
         E entity = getMapper().map(dto, getEntityClass());
 
-        entity.setCreatedAt(Calendar.getInstance());
+        if (entity instanceof Trackable) {
+            ((Trackable)entity).setCreatedAt(Calendar.getInstance());
+        }
 
         getRepo().save(entity);
 
@@ -71,8 +74,11 @@ public abstract class AbstractResourceService<D extends AbstractDto, E extends A
         E newEntity = getMapper().map(dto, getEntityClass());
 
         newEntity.setId(id);
-        newEntity.setCreatedAt(oldEntity.getCreatedAt());
-        newEntity.setUpdatedAt(Calendar.getInstance());
+
+        if (newEntity instanceof Trackable) {
+            ((Trackable)newEntity).setCreatedAt(((Trackable)oldEntity).getCreatedAt());
+            ((Trackable)newEntity).setUpdatedAt(Calendar.getInstance());
+        }
 
         getRepo().save(newEntity);
     }

@@ -1,6 +1,7 @@
 package ru.andrewquiz.dao.quiz;
 
 import ru.andrewquiz.dao.AbstractEntity;
+import ru.andrewquiz.dao.Trackable;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "categories")
-public class CategoryEntity extends AbstractEntity<Long> {
+public class CategoryEntity extends AbstractEntity<Long> implements Trackable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
