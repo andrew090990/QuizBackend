@@ -52,7 +52,7 @@ public class CategoryService {
 
     public Category getCategory(Long id) {
 
-        CategoryEntity categoryEntity = findCategory(id);
+        CategoryEntity categoryEntity = findCategoryEntity(id);
 
         Category category = mapper.map(categoryEntity, Category.class);
 
@@ -95,7 +95,7 @@ public class CategoryService {
 
     public void deleteCategory(long id) {
 
-        CategoryEntity categoryEntity = findCategory(id);
+        CategoryEntity categoryEntity = findCategoryEntity(id);
 
         validateReferentialIntegrity(categoryEntity);
 
@@ -127,7 +127,7 @@ public class CategoryService {
         }
     }
 
-    private CategoryEntity findCategory(Long id) {
+    private CategoryEntity findCategoryEntity(Long id) {
 
         CategoryEntity categoryEntity = repo.findOne(id);
 
