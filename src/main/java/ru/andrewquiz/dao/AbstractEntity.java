@@ -10,4 +10,5 @@ public abstract class AbstractEntity<PK> {
 
     public abstract void setId(PK id);
 
+    public abstract void attachChildrenToParent();
 }

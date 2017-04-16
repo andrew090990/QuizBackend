@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.andrewquiz.dto.quiz.FullQuiz;
@@ -47,6 +48,7 @@ public class QuizController {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     @RequestMapping(value = "{quizId:\\d+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
     public @ResponseBody Quiz getQuiz(@PathVariable long quizId, @RequestParam(defaultValue = "true", required = false) boolean includeContent) {
 
@@ -67,7 +69,7 @@ public class QuizController {
     }
 
     @Transactional
-    @RequestMapping(value = "quizId:\\d+}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+    @RequestMapping(value = "{quizId:\\d+}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
     public @ResponseBody FullQuiz putFullQuiz(@RequestBody FullQuiz fullQuiz, @PathVariable long quizId) {
 
         fullQuizService.updateEntity(fullQuiz, quizId);

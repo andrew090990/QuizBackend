@@ -92,4 +92,9 @@ public class QuizEntity extends AbstractEntity<Long> implements Trackable {
         this.name = name;
     }
 
+    @Override
+    public void attachChildrenToParent() {
+        return;
+    }
+
 }

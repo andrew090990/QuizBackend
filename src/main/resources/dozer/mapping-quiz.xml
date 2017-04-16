@@ -117,4 +117,14 @@
         <class-a>ru.andrewquiz.dao.quiz.FullQuizEntity</class-a>
         <class-b>ru.andrewquiz.dto.quiz.FullQuiz</class-b>
     </mapping>
+
+    <mapping type="one-way">
+        <class-a>ru.andrewquiz.dto.quiz.Answer</class-a>
+        <class-b>ru.andrewquiz.dao.quiz.AnswerEntity</class-b>
+    </mapping>
+
+    <mapping type="one-way">
+        <class-a>ru.andrewquiz.dao.quiz.AnswerEntity</class-a>
+        <class-b>ru.andrewquiz.dto.quiz.Answer</class-b>
+    </mapping>
 </mappings>

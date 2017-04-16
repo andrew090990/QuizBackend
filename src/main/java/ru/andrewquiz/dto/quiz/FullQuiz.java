@@ -1,5 +1,7 @@
 package ru.andrewquiz.dto.quiz;
 
+import java.util.List;
+
 /**
  * Created by Andrew on 16.04.2017.
  */
@@ -11,6 +13,10 @@ public class FullQuiz extends  Quiz {
     private String introduction;
 
     private String content;
+
+    private List<Question> questions;
+
+    private List<Answer> answers;
 
     public String getInstructions() {
         return instructions;
@@ -36,4 +42,19 @@ public class FullQuiz extends  Quiz {
         this.content = content;
     }
 
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
 }

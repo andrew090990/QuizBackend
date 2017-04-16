@@ -1,9 +1,7 @@
 package ru.andrewquiz.dao.quiz;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Andrew on 16.04.2017.
@@ -22,6 +20,12 @@ public class FullQuizEntity extends QuizEntity {
 
     @Column(name = "content")
     private String content;
+
+    @OneToMany(mappedBy = "fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuestionEntity> questions;
+
+    @OneToMany(mappedBy = "fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AnswerEntity> answers;
 
     public String getInstructions() {
         return instructions;
@@ -47,4 +51,30 @@ public class FullQuizEntity extends QuizEntity {
         this.content = content;
     }
 
+    public List<QuestionEntity> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<QuestionEntity> questions) {
+        this.questions = questions;
+    }
+
+    public List<AnswerEntity> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<AnswerEntity> answers) {
+        this.answers = answers;
+    }
+
+    @Override
+    public void attachChildrenToParent() {
+        for (QuestionEntity questionEntity : questions) {
+            questionEntity.setFullQuiz(this);
+        }
+
+        for (AnswerEntity answerEntity : answers) {
+            answerEntity.setFullQuiz(this);
+        }
+    }
 }

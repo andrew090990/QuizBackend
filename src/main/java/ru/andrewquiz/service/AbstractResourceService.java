@@ -56,8 +56,11 @@ public abstract class AbstractResourceService<D extends AbstractDto, E extends A
 
         E entity = getMapper().map(dto, getEntityClass());
 
+        entity.attachChildrenToParent();
+
         if (entity instanceof Trackable) {
             ((Trackable)entity).setCreatedAt(Calendar.getInstance());
+            ((Trackable)entity).getCreatedAt().clear(Calendar.MILLISECOND);
         }
 
         getRepo().save(entity);
@@ -74,10 +77,13 @@ public abstract class AbstractResourceService<D extends AbstractDto, E extends A
         E newEntity = getMapper().map(dto, getEntityClass());
 
         newEntity.setId(id);
+        newEntity.attachChildrenToParent();
 
         if (newEntity instanceof Trackable) {
             ((Trackable)newEntity).setCreatedAt(((Trackable)oldEntity).getCreatedAt());
+
             ((Trackable)newEntity).setUpdatedAt(Calendar.getInstance());
+            ((Trackable)newEntity).getUpdatedAt().clear(Calendar.MILLISECOND);
         }
 
         getRepo().save(newEntity);

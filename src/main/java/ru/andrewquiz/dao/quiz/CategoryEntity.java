@@ -114,4 +114,10 @@ public class CategoryEntity extends AbstractEntity<Long> implements Trackable {
         this.updatedAt = updatedAt;
     }
 
+    @Override
+    public void attachChildrenToParent() {
+        return;
+    }
+
+    //TODO toString() for all entities, dtos; refactor EntityNotFoundException
 }

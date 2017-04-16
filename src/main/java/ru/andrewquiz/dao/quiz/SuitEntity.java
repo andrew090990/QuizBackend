@@ -91,4 +91,9 @@ public class SuitEntity extends AbstractEntity<Long> implements Trackable {
     public void setQuizes(List<QuizEntity> quizes) {
         this.quizes = quizes;
     }
+
+    @Override
+    public void attachChildrenToParent() {
+        return;
+    }
 }

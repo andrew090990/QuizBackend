@@ -9,5 +9,7 @@
         <class>ru.andrewquiz.dao.quiz.SuitEntity</class>
 		<class>ru.andrewquiz.dao.quiz.QuizEntity</class>
 		<class>ru.andrewquiz.dao.quiz.FullQuizEntity</class>
+		<class>ru.andrewquiz.dao.quiz.QuestionEntity</class>
+		<class>ru.andrewquiz.dao.quiz.AnswerEntity</class>
 	</persistence-unit>
 </persistence>
