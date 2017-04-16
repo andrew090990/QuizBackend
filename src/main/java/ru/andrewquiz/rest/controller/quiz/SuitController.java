@@ -7,10 +7,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import ru.andrewquiz.dto.quiz.FullQuiz;
+import ru.andrewquiz.dto.quiz.Quiz;
 import ru.andrewquiz.dto.quiz.Suit;
+import ru.andrewquiz.service.quiz.FullQuizService;
+import ru.andrewquiz.service.quiz.QuizService;
 import ru.andrewquiz.service.quiz.SuitService;
 
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +28,17 @@ public class SuitController {
 
     private SuitService suitService;
 
+    private QuizService quizService;
+
+    private FullQuizService fullQuizService;
+
     private Logger logger = Logger.getLogger(SuitController.class);
 
     @Autowired
-    public SuitController(SuitService suitService) {
+    public SuitController(SuitService suitService, QuizService quizService, FullQuizService fullQuizService) {
         this.suitService = suitService;
+        this.quizService = quizService;
+        this.fullQuizService = fullQuizService;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
@@ -40,6 +51,17 @@ public class SuitController {
     public @ResponseBody Suit getSuit(@PathVariable long suitId) {
 
         return suitService.getDto(suitId);
+    }
+
+    @RequestMapping(value = "{suitId:\\d+}/quizes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
+    public @ResponseBody List<Quiz> getQuizesBySuit(@PathVariable long suitId, @RequestParam(defaultValue = "true", required = false) boolean includeContent) {
+
+        if (includeContent) {
+            List<FullQuiz> listFullQuiz = fullQuizService.getFullQuizesBySuitId(suitId);
+            return new ArrayList<Quiz>(listFullQuiz);
+        } else {
+            return quizService.getQuizesBySuitId(suitId);
+        }
     }
 
     @Transactional

@@ -3,19 +3,19 @@ package ru.andrewquiz.mapper.converter.quiz;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.andrewquiz.mapper.converter.AbstractLongEntityConverter;
-import ru.andrewquiz.repository.quiz.CategoryRepository;
+import ru.andrewquiz.repository.quiz.SuitRepository;
 
 /**
- * Created by Andrew on 12.04.2017.
+ * Created by Andrew on 15.04.2017.
  */
 
 @Component
-public class LongCategoryConverter extends AbstractLongEntityConverter {
+public class LongSuitConverter extends AbstractLongEntityConverter {
 
-    private CategoryRepository repo;
+    private SuitRepository repo;
 
     @Autowired
-    public LongCategoryConverter(CategoryRepository repo) {
+    public LongSuitConverter(SuitRepository repo) {
         this.repo = repo;
     }
 

@@ -7,5 +7,7 @@
 
 		<class>ru.andrewquiz.dao.quiz.CategoryEntity</class>
         <class>ru.andrewquiz.dao.quiz.SuitEntity</class>
+		<class>ru.andrewquiz.dao.quiz.QuizEntity</class>
+		<class>ru.andrewquiz.dao.quiz.FullQuizEntity</class>
 	</persistence-unit>
 </persistence>

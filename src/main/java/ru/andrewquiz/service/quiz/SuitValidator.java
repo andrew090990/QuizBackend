@@ -1,8 +1,10 @@
 package ru.andrewquiz.service.quiz;
 
 import org.springframework.stereotype.Component;
+import ru.andrewquiz.dao.quiz.QuizEntity;
 import ru.andrewquiz.dao.quiz.SuitEntity;
 import ru.andrewquiz.dto.quiz.Suit;
+import ru.andrewquiz.rest.exception.IllegalDeletionException;
 import ru.andrewquiz.service.Validator;
 
 /**
@@ -15,6 +17,18 @@ public class SuitValidator implements Validator<Suit, SuitEntity> {
     @Override
     public void validateReferentialIntegrity(SuitEntity suitEntity) {
 
-        return;
+        IllegalDeletionException e = null;
+
+        for (QuizEntity quizEntity : suitEntity.getQuizes()) {
+            if (e == null) {
+                e = new IllegalDeletionException();
+            }
+
+            e.addDependentObject("quiz", quizEntity.getId(), quizEntity.getName());
+        }
+
+        if (e != null) {
+            throw e;
+        }
     }
 }

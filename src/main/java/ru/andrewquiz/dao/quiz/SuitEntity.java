@@ -5,6 +5,7 @@ import ru.andrewquiz.dao.Trackable;
 
 import javax.persistence.*;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Andrew on 25.03.2017.
@@ -33,6 +34,9 @@ public class SuitEntity extends AbstractEntity<Long> implements Trackable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Calendar updatedAt;
+
+    @OneToMany(mappedBy = "suit")
+    private List<QuizEntity> quizes;
 
     @Override
     public Long getId() {
@@ -80,4 +84,11 @@ public class SuitEntity extends AbstractEntity<Long> implements Trackable {
         this.updatedAt = updatedAt;
     }
 
+    public List<QuizEntity> getQuizes() {
+        return quizes;
+    }
+
+    public void setQuizes(List<QuizEntity> quizes) {
+        this.quizes = quizes;
+    }
 }
