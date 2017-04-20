@@ -17,18 +17,16 @@ public class AnswerEntity implements Serializable {
     private FullQuizEntity fullQuiz;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     @Column(name = "question_number", nullable = true)
     private Long questionNumber;
 
-    @Id
-    @Column(name = "number", nullable = false)
-    private Long number;
-
-    @Id
     @Column(name = "content")
     private String content;
 
-    @Id
     @Column(name = "code")
     private String code;
 
@@ -48,12 +46,12 @@ public class AnswerEntity implements Serializable {
         this.questionNumber = questionNumber;
     }
 
-    public Long getNumber() {
-        return number;
+    public Long getId() {
+        return id;
     }
 
-    public void setNumber(Long number) {
-        this.number = number;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getContent() {

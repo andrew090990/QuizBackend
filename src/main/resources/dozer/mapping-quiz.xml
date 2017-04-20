@@ -121,6 +121,10 @@
     <mapping type="one-way">
         <class-a>ru.andrewquiz.dto.quiz.Answer</class-a>
         <class-b>ru.andrewquiz.dao.quiz.AnswerEntity</class-b>
+        <field-exclude>
+            <a>id</a>
+            <b>id</b>
+        </field-exclude>
     </mapping>
 
     <mapping type="one-way">

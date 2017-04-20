@@ -2,6 +2,7 @@ package ru.andrewquiz.dao.quiz;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Andrew on 16.04.2017.
@@ -19,6 +20,9 @@ public class QuestionEntity implements Serializable{
     @Id
     @Column(name = "number", nullable = false)
     private Long number;
+
+    @OneToMany(mappedBy = "question")
+    private List<KeyEntity> keys;
 
     @Column(name = "hint")
     private String hint;

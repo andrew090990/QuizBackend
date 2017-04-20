@@ -8,7 +8,7 @@ public class Answer {
 
     private Long questionNumber;
 
-    private Long number;
+    private Long id;
 
     private String content;
 
@@ -22,12 +22,12 @@ public class Answer {
         this.questionNumber = questionNumber;
     }
 
-    public Long getNumber() {
-        return number;
+    public Long getId() {
+        return id;
     }
 
-    public void setNumber(Long number) {
-        this.number = number;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getContent() {
