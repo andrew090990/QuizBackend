@@ -10,18 +10,20 @@ import java.util.List;
 
 @Entity
 @Table(name = "questions")
-public class QuestionEntity implements Serializable{
+public class QuestionEntity implements Serializable {
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = false)
     private FullQuizEntity fullQuiz;
 
     @Id
-    @Column(name = "number", nullable = false)
+    @Column(name = "question_number", nullable = false)
     private Long number;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuestionsAnswersCorrelationEntity> answers;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<KeyEntity> keys;
 
     @Column(name = "hint")
@@ -49,5 +51,21 @@ public class QuestionEntity implements Serializable{
 
     public void setHint(String hint) {
         this.hint = hint;
+    }
+
+    public List<QuestionsAnswersCorrelationEntity> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<QuestionsAnswersCorrelationEntity> answers) {
+        this.answers = answers;
+    }
+
+    public List<KeyEntity> getKeys() {
+        return keys;
+    }
+
+    public void setKeys(List<KeyEntity> keys) {
+        this.keys = keys;
     }
 }

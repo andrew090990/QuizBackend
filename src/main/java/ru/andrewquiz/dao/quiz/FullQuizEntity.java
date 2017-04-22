@@ -71,6 +71,14 @@ public class FullQuizEntity extends QuizEntity {
     public void attachChildrenToParent() {
         for (QuestionEntity questionEntity : questions) {
             questionEntity.setFullQuiz(this);
+
+            for (QuestionsAnswersCorrelationEntity questionsAnswersCorrelationEntity : questionEntity.getAnswers()) {
+                questionsAnswersCorrelationEntity.setQuestion(questionEntity);
+            }
+
+            for (KeyEntity keyEntity : questionEntity.getKeys()) {
+                keyEntity.setQuestion(questionEntity);
+            }
         }
 
         for (AnswerEntity answerEntity : answers) {

@@ -77,7 +77,7 @@
             <a>suitId</a>
             <b>suit</b>
         </field>
-        <field custom-converter-id="QuizTypeLongConverter">
+        <field custom-converter-id="QuizLongConverter">
             <a>type</a>
             <b>typeId</b>
         </field>
@@ -102,7 +102,7 @@
             <a>suit.id</a>
             <b>suitId</b>
         </field>
-        <field custom-converter-id="LongQuizTypeConverter">
+        <field custom-converter-id="LongQuizConverter">
             <a>typeId</a>
             <b>type</b>
         </field>
@@ -119,12 +119,34 @@
     </mapping>
 
     <mapping type="one-way">
+        <class-a>ru.andrewquiz.dto.quiz.Question</class-a>
+        <class-b>ru.andrewquiz.dao.quiz.QuestionEntity</class-b>
+        <field custom-converter-id="LongQuestionsAnswersCorrelationConverter">
+            <a>answers</a>
+            <b>answers</b>
+        </field>
+        <field custom-converter-id="LongKeysConverter">
+            <a>keys</a>
+            <b>keys</b>
+        </field>
+    </mapping>
+
+    <mapping type="one-way">
+        <class-a>ru.andrewquiz.dao.quiz.QuestionEntity</class-a>
+        <class-b>ru.andrewquiz.dto.quiz.Question</class-b>
+        <field custom-converter-id="QuestionsAnswersCorrelationConverter">
+            <a>answers</a>
+            <b>answers</b>
+        </field>
+        <field custom-converter-id="KeysConverter">
+            <a>keys</a>
+            <b>keys</b>
+        </field>
+    </mapping>
+
+    <mapping type="one-way">
         <class-a>ru.andrewquiz.dto.quiz.Answer</class-a>
         <class-b>ru.andrewquiz.dao.quiz.AnswerEntity</class-b>
-        <field-exclude>
-            <a>id</a>
-            <b>id</b>
-        </field-exclude>
     </mapping>
 
     <mapping type="one-way">

@@ -17,7 +17,7 @@ public class QuizEntity extends AbstractEntity<Long> implements Trackable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = false)
+    @Column(name = "quiz_id", nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "name", nullable = false)

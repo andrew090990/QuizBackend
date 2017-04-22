@@ -11,18 +11,14 @@ import java.io.Serializable;
 @Table(name = "answers")
 public class AnswerEntity implements Serializable {
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = false)
     private FullQuizEntity fullQuiz;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "answer_id", nullable = false)
     private Long id;
-
-    @Column(name = "question_number", nullable = true)
-    private Long questionNumber;
 
     @Column(name = "content")
     private String content;
@@ -36,14 +32,6 @@ public class AnswerEntity implements Serializable {
 
     public void setFullQuiz(FullQuizEntity fullQuiz) {
         this.fullQuiz = fullQuiz;
-    }
-
-    public Long getQuestionNumber() {
-        return questionNumber;
-    }
-
-    public void setQuestionNumber(Long questionNumber) {
-        this.questionNumber = questionNumber;
     }
 
     public Long getId() {

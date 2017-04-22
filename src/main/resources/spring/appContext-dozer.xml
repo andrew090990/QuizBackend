@@ -15,15 +15,23 @@
             <map>
                 <entry key="LongCategoryConverter" value-ref="longCategoryConverter"/>
                 <entry key="LongSuitConverter" value-ref="longSuitConverter"/>
-                <entry key="LongQuizTypeConverter" value-ref="longQuizTypeConverter"/>
-                <entry key="QuizTypeLongConverter" value-ref="quizTypeLongConverter"/>
+                <entry key="LongQuizConverter" value-ref="longQuizConverter"/>
+                <entry key="QuizLongConverter" value-ref="quizLongConverter"/>
+                <entry key="QuestionsAnswersCorrelationConverter" value-ref="questionsAnswersCorrelationConverter"/>
+                <entry key="KeysConverter" value-ref="keysConverter"/>
+                <entry key="LongQuestionsAnswersCorrelationConverter" value-ref="longQuestionsAnswersCorrelationConverter"/>
+                <entry key="LongKeysConverter" value-ref="longKeysConverter"/>
             </map>
         </property>
     </bean>
 
     <bean id="longCategoryConverter" class="ru.andrewquiz.mapper.converter.quiz.LongCategoryConverter"/>
     <bean id="longSuitConverter" class="ru.andrewquiz.mapper.converter.quiz.LongSuitConverter"/>
-    <bean id="longQuizTypeConverter" class="ru.andrewquiz.mapper.converter.quiz.LongQuizTypeConverter"/>
-    <bean id="quizTypeLongConverter" class="ru.andrewquiz.mapper.converter.quiz.QuizTypeLongConverter"/>
+    <bean id="longQuizConverter" class="ru.andrewquiz.mapper.converter.quiz.LongQuizConverter"/>
+    <bean id="quizLongConverter" class="ru.andrewquiz.mapper.converter.quiz.QuizLongConverter"/>
+    <bean id="questionsAnswersCorrelationConverter" class="ru.andrewquiz.mapper.converter.quiz.QuestionsAnswersCorrelationConverter"/>
+    <bean id="keysConverter" class="ru.andrewquiz.mapper.converter.quiz.KeysConverter"/>
+    <bean id="longQuestionsAnswersCorrelationConverter" class="ru.andrewquiz.mapper.converter.quiz.LongQuestionsAnswersCorrelationConverter"/>
+    <bean id="longKeysConverter" class="ru.andrewquiz.mapper.converter.quiz.LongKeysConverter"/>
 
 </beans>

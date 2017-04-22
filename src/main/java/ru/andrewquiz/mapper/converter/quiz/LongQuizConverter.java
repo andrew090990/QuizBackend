@@ -10,7 +10,7 @@ import ru.andrewquiz.dto.quiz.QuizType;
  */
 
 @Component
-public class QuizTypeLongConverter implements CustomConverter {
+public class LongQuizConverter implements CustomConverter {
 
     @Override
     public Object convert(Object dst, Object src, Class dstClass, Class srcClass) {
@@ -19,11 +19,15 @@ public class QuizTypeLongConverter implements CustomConverter {
             return null;
         }
 
-        if (!(src instanceof QuizType)) {
-            throw new MappingException("Wrong arguments in QuizTypeLongConverter. Src must be QuizType. Src = " + src);
+        if (!(src instanceof Long)) {
+            throw new MappingException("Wrong arguments in LongQuizTypeConverter. Src must be Long. Src = " + src);
         }
 
-        dst = ((QuizType)src).id();
+        dst = QuizType.fromId((long)src);
+
+        if (dst == null) {
+            throw new MappingException("Couldn't map id " + src + " to quiz type.");
+        }
 
         return dst;
     }

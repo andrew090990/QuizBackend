@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Created by Andrew on 20.04.2017.
+ * Created by Andrew on 21.04.2017.
  */
 
 @Entity
-@Table(name = "`keys`")
-public class KeyEntity implements Serializable {
+@Table(name = "questions_answers_correlation")
+public class QuestionsAnswersCorrelationEntity implements Serializable {
 
     @Id
     @ManyToOne
