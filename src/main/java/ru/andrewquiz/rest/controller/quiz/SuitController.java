@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.andrewquiz.dto.quiz.FullQuiz;
@@ -53,6 +54,7 @@ public class SuitController {
         return suitService.getDto(suitId);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     @RequestMapping(value = "{suitId:\\d+}/quizes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
     public @ResponseBody List<Quiz> getQuizesBySuit(@PathVariable long suitId, @RequestParam(defaultValue = "true", required = false) boolean includeContent) {
 

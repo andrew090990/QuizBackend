@@ -1,6 +1,7 @@
 package ru.andrewquiz.dao.quiz;
 
-import ru.andrewquiz.dao.AbstractEntity;
+
+import ru.andrewquiz.dao.Identifiable;
 import ru.andrewquiz.dao.Trackable;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "suits")
-public class SuitEntity extends AbstractEntity<Long> implements Trackable {
+public class SuitEntity implements Identifiable, Trackable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,7 +62,19 @@ public class SuitEntity extends AbstractEntity<Long> implements Trackable {
     }
 
     public void setCategory(CategoryEntity category) {
+        setCategory(category, true);
+    }
+
+    public void setCategory(CategoryEntity category, boolean updateReference) {
+        if (this.category!= null) {
+            this.category.removeSuit(this, false);
+        }
+
         this.category = category;
+
+        if (category != null && updateReference) {
+            category.addSuit(this, false);
+        }
     }
 
     @Override
@@ -92,8 +105,58 @@ public class SuitEntity extends AbstractEntity<Long> implements Trackable {
         this.quizes = quizes;
     }
 
+    public void addQuiz(QuizEntity quiz) {
+        addQuiz(quiz, true);
+    }
+
+    public void addQuiz(QuizEntity quiz, boolean updateReference) {
+        if (quiz == null) {
+            return;
+        }
+
+        if (quizes.contains(quiz)) {
+            quizes.set(quizes.indexOf(quiz), quiz);
+        } else {
+            quizes.add(quiz);
+        }
+
+        if (updateReference) {
+            quiz.setSuit(this, false);
+        }
+    }
+
+    public void removeQuiz(QuizEntity quiz) {
+        removeQuiz(quiz, true);
+    }
+
+    public void removeQuiz(QuizEntity quiz, boolean updateReference) {
+        if (quiz == null) {
+            return;
+        }
+
+        quizes.remove(quiz);
+
+        if (updateReference) {
+            quiz.setSuit(null, false);
+        }
+    }
+
+
     @Override
-    public void attachChildrenToParent() {
-        return;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass() || id == null) {
+            return false;
+        }
+
+        return id.equals(((SuitEntity)o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id.hashCode();
     }
 }

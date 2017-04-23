@@ -5,10 +5,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.QuizEntity;
 import ru.andrewquiz.dto.quiz.Quiz;
-import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.repository.quiz.QuizRepository;
 import ru.andrewquiz.service.AbstractResourceService;
 import ru.andrewquiz.service.Validator;
+import ru.andrewquiz.service.mapper.AbstractMapper;
+import ru.andrewquiz.service.mapper.quiz.QuizDtoToEntityMapper;
+import ru.andrewquiz.service.mapper.quiz.QuizEntityToDtoMapper;
 
 import java.util.List;
 
@@ -17,27 +19,31 @@ import java.util.List;
  */
 
 @Service
-public class QuizService extends AbstractResourceService<Quiz, QuizEntity, Long> {
+public class QuizService extends AbstractResourceService<Quiz, QuizEntity> {
 
     private QuizValidator validator;
 
-    private CustomDozerBeanMapper mapper;
-
     private QuizRepository repo;
 
+    private QuizDtoToEntityMapper dtoToEntityMapper;
+
+    private QuizEntityToDtoMapper entityToDtoMapper;
+
     @Autowired
-    public QuizService(QuizRepository repo, CustomDozerBeanMapper mapper, QuizValidator validator) {
+    public QuizService(QuizRepository repo, QuizValidator validator,
+                           QuizDtoToEntityMapper dtoToEntityMapper, QuizEntityToDtoMapper entityToDtoMapper) {
 
         this.repo = repo;
-        this.mapper = mapper;
         this.validator = validator;
+        this.entityToDtoMapper = entityToDtoMapper;
+        this.dtoToEntityMapper = dtoToEntityMapper;
     }
 
     public List<Quiz> getQuizesBySuitId(Long suitId) {
 
         Iterable<QuizEntity> quizEntities = repo.findBySuitId(suitId);
 
-        List<Quiz> quizes = mapper.mapList(quizEntities, Quiz.class);
+        List<Quiz> quizes = entityToDtoMapper.mapList(quizEntities);
 
         return quizes;
     }
@@ -45,11 +51,6 @@ public class QuizService extends AbstractResourceService<Quiz, QuizEntity, Long>
     @Override
     protected Class<Quiz> getDtoClass() {
         return Quiz.class;
-    }
-
-    @Override
-    protected Class<QuizEntity> getEntityClass() {
-        return QuizEntity.class;
     }
 
     @Override
@@ -63,7 +64,12 @@ public class QuizService extends AbstractResourceService<Quiz, QuizEntity, Long>
     }
 
     @Override
-    protected CustomDozerBeanMapper getMapper() {
-        return mapper;
+    protected AbstractMapper<Quiz, QuizEntity> getDtoToEntityMapper() {
+        return dtoToEntityMapper;
+    }
+
+    @Override
+    protected AbstractMapper<QuizEntity, Quiz> getEntityToDtoMapper() {
+        return entityToDtoMapper;
     }
 }

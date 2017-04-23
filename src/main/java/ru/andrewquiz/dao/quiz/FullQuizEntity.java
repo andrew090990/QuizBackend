@@ -59,6 +59,42 @@ public class FullQuizEntity extends QuizEntity {
         this.questions = questions;
     }
 
+    public void addQuestion(QuestionEntity question) {
+        addQuestion(question, true);
+    }
+
+    public void addQuestion(QuestionEntity question, boolean updateReference) {
+        if (question == null) {
+            return;
+        }
+
+        if (questions.contains(question)) {
+            questions.set(questions.indexOf(question), question);
+        } else {
+            questions.add(question);
+        }
+
+        if (updateReference) {
+            question.setFullQuiz(this, false);
+        }
+    }
+
+    public void removeQuestion(QuestionEntity question) {
+        removeQuestion(question, true);
+    }
+
+    public void removeQuestion(QuestionEntity question, boolean updateReference) {
+        if (question == null) {
+            return;
+        }
+
+        questions.remove(question);
+
+        if (updateReference) {
+            question.setFullQuiz(null, false);
+        }
+    }
+
     public List<AnswerEntity> getAnswers() {
         return answers;
     }
@@ -67,22 +103,57 @@ public class FullQuizEntity extends QuizEntity {
         this.answers = answers;
     }
 
+    public void addAnswer(AnswerEntity answer) {
+        addAnswer(answer, true);
+    }
+
+    public void addAnswer(AnswerEntity answer, boolean updateReference) {
+        if (answer == null) {
+            return;
+        }
+
+        if (answers.contains(answer)) {
+            answers.set(answers.indexOf(answer), answer);
+        } else {
+            answers.add(answer);
+        }
+
+        if (updateReference) {
+            answer.setFullQuiz(this, false);
+        }
+    }
+
+    public void removeAnswer(AnswerEntity answer) {
+        removeAnswer(answer, true);
+    }
+
+    public void removeAnswer(AnswerEntity answer, boolean updateReference) {
+        if (answer == null) {
+            return;
+        }
+
+        answers.remove(answer);
+
+        if (updateReference) {
+            answer.setFullQuiz(null, false);
+        }
+    }
+
     @Override
-    public void attachChildrenToParent() {
-        for (QuestionEntity questionEntity : questions) {
-            questionEntity.setFullQuiz(this);
-
-            for (QuestionsAnswersCorrelationEntity questionsAnswersCorrelationEntity : questionEntity.getAnswers()) {
-                questionsAnswersCorrelationEntity.setQuestion(questionEntity);
-            }
-
-            for (KeyEntity keyEntity : questionEntity.getKeys()) {
-                keyEntity.setQuestion(questionEntity);
-            }
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
 
-        for (AnswerEntity answerEntity : answers) {
-            answerEntity.setFullQuiz(this);
+        if (o == null || getClass() != o.getClass() || getId() == null) {
+            return false;
         }
+
+        return getId().equals(((FullQuizEntity)o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId() == null ? 0 : getId().hashCode();
     }
 }

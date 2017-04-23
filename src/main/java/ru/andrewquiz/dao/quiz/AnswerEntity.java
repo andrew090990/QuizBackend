@@ -31,7 +31,19 @@ public class AnswerEntity implements Serializable {
     }
 
     public void setFullQuiz(FullQuizEntity fullQuiz) {
+        setFullQuiz(fullQuiz, true);
+    }
+
+    public void setFullQuiz(FullQuizEntity fullQuiz, boolean updateReference) {
+        if (this.fullQuiz!= null) {
+            this.fullQuiz.removeAnswer(this, false);
+        }
+
         this.fullQuiz = fullQuiz;
+
+        if (fullQuiz != null && updateReference) {
+            fullQuiz.addAnswer(this, false);
+        }
     }
 
     public Long getId() {
@@ -56,5 +68,28 @@ public class AnswerEntity implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass() || getId() == null || getFullQuiz() == null) {
+            return false;
+        }
+
+        AnswerEntity that = (AnswerEntity)o;
+
+        return getId().equals(that.getId())
+                && getFullQuiz().equals(that.getFullQuiz());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = fullQuiz != null ? fullQuiz.hashCode() : 0;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        return result;
     }
 }

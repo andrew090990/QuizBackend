@@ -5,10 +5,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.SuitEntity;
 import ru.andrewquiz.dto.quiz.Suit;
-import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.repository.quiz.SuitRepository;
 import ru.andrewquiz.service.AbstractResourceService;
 import ru.andrewquiz.service.Validator;
+import ru.andrewquiz.service.mapper.AbstractMapper;
+import ru.andrewquiz.service.mapper.quiz.SuitDtoToEntityMapper;
+import ru.andrewquiz.service.mapper.quiz.SuitEntityToDtoMapper;
 
 import java.util.List;
 
@@ -17,27 +19,30 @@ import java.util.List;
  */
 
 @Service
-public class SuitService extends AbstractResourceService<Suit, SuitEntity, Long> {
+public class SuitService extends AbstractResourceService<Suit, SuitEntity> {
 
     private SuitRepository repo;
 
-    private CustomDozerBeanMapper mapper;
-
     private SuitValidator validator;
 
+    private SuitDtoToEntityMapper dtoToEntityMapper;
+
+    private SuitEntityToDtoMapper entityToDtoMapper;
+
     @Autowired
-    public SuitService(SuitRepository repo, CustomDozerBeanMapper mapper, SuitValidator validator) {
+    public SuitService(SuitRepository repo, SuitValidator validator, SuitDtoToEntityMapper dtoToEntityMapper, SuitEntityToDtoMapper entityToDtoMapper) {
 
         this.repo = repo;
-        this.mapper = mapper;
         this.validator = validator;
+        this.entityToDtoMapper = entityToDtoMapper;
+        this.dtoToEntityMapper = dtoToEntityMapper;
     }
 
     public List<Suit> getSuitsByCategoryId(Long categoryId) {
 
         Iterable<SuitEntity> suitEntities = repo.findByCategoryId(categoryId);
 
-        List<Suit> suits = mapper.mapList(suitEntities, Suit.class);
+        List<Suit> suits = entityToDtoMapper.mapList(suitEntities);
 
         return suits;
     }
@@ -45,11 +50,6 @@ public class SuitService extends AbstractResourceService<Suit, SuitEntity, Long>
     @Override
     protected Class<Suit> getDtoClass() {
         return Suit.class;
-    }
-
-    @Override
-    protected Class<SuitEntity> getEntityClass() {
-        return SuitEntity.class;
     }
 
     @Override
@@ -63,8 +63,13 @@ public class SuitService extends AbstractResourceService<Suit, SuitEntity, Long>
     }
 
     @Override
-    protected CustomDozerBeanMapper getMapper() {
-        return mapper;
+    protected AbstractMapper<Suit, SuitEntity> getDtoToEntityMapper() {
+        return dtoToEntityMapper;
+    }
+
+    @Override
+    protected AbstractMapper<SuitEntity, Suit> getEntityToDtoMapper() {
+        return entityToDtoMapper;
     }
 
 }

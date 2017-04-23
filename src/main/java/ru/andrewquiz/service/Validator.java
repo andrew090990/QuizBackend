@@ -1,7 +1,6 @@
 package ru.andrewquiz.service;
 
 import org.springframework.stereotype.Component;
-import ru.andrewquiz.dao.AbstractEntity;
 import ru.andrewquiz.dto.AbstractDto;
 
 /**
@@ -9,7 +8,7 @@ import ru.andrewquiz.dto.AbstractDto;
  */
 
 @Component
-public interface Validator <D extends AbstractDto, E extends AbstractEntity> {
+public interface Validator <D extends AbstractDto, E> {
 
     public abstract void validateReferentialIntegrity(E entity);
 }

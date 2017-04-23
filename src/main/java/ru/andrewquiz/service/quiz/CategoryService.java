@@ -5,10 +5,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.CategoryEntity;
 import ru.andrewquiz.dto.quiz.Category;
-import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.repository.quiz.CategoryRepository;
 import ru.andrewquiz.service.AbstractResourceService;
 import ru.andrewquiz.service.Validator;
+import ru.andrewquiz.service.mapper.AbstractMapper;
+import ru.andrewquiz.service.mapper.quiz.CategoryDtoToEntityMapper;
+import ru.andrewquiz.service.mapper.quiz.CategoryEntityToDtoMapper;
 
 import java.util.List;
 
@@ -17,27 +19,31 @@ import java.util.List;
  */
 
 @Service
-public class CategoryService extends AbstractResourceService<Category, CategoryEntity, Long> {
+public class CategoryService extends AbstractResourceService<Category, CategoryEntity> {
 
     private CategoryRepository repo;
 
-    private CustomDozerBeanMapper mapper;
+    private CategoryDtoToEntityMapper dtoToEntityMapper;
+
+    private CategoryEntityToDtoMapper entityToDtoMapper;
 
     private CategoryValidator validator;
 
     @Autowired
-    public CategoryService(CategoryRepository repo, CustomDozerBeanMapper mapper, CategoryValidator validator) {
+    public CategoryService(CategoryRepository repo, CategoryValidator validator,
+                           CategoryDtoToEntityMapper dtoToEntityMapper, CategoryEntityToDtoMapper entityToDtoMapper) {
 
         this.repo = repo;
-        this.mapper = mapper;
         this.validator = validator;
+        this.entityToDtoMapper = entityToDtoMapper;
+        this.dtoToEntityMapper = dtoToEntityMapper;
     }
 
     public List<Category> getCategoriesByParentCategoryId(Long parentCategoryId) {
 
         Iterable<CategoryEntity> categoryEntities = repo.findByParentCategoryId(parentCategoryId);
 
-        List<Category> categories = mapper.mapList(categoryEntities, Category.class);
+        List<Category> categories = entityToDtoMapper.mapList(categoryEntities);
 
         return categories;
     }
@@ -45,11 +51,6 @@ public class CategoryService extends AbstractResourceService<Category, CategoryE
     @Override
     protected Class<Category> getDtoClass() {
         return Category.class;
-    }
-
-    @Override
-    protected Class<CategoryEntity> getEntityClass() {
-        return CategoryEntity.class;
     }
 
     @Override
@@ -63,7 +64,12 @@ public class CategoryService extends AbstractResourceService<Category, CategoryE
     }
 
     @Override
-    protected CustomDozerBeanMapper getMapper() {
-        return mapper;
+    protected AbstractMapper<Category, CategoryEntity> getDtoToEntityMapper() {
+        return dtoToEntityMapper;
+    }
+
+    @Override
+    protected AbstractMapper<CategoryEntity, Category> getEntityToDtoMapper() {
+        return entityToDtoMapper;
     }
 }

@@ -10,8 +10,6 @@
 
     <import resource="appContext-jpa.xml"/>
 
-    <import resource="appContext-dozer.xml"/>
-
     <import resource="appContext-beans.xml"/>
 
 

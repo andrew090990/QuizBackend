@@ -5,10 +5,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.FullQuizEntity;
 import ru.andrewquiz.dto.quiz.FullQuiz;
-import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.repository.quiz.FullQuizRepository;
 import ru.andrewquiz.service.AbstractResourceService;
 import ru.andrewquiz.service.Validator;
+import ru.andrewquiz.service.mapper.AbstractMapper;
+import ru.andrewquiz.service.mapper.quiz.FullQuizDtoToEntityMapper;
+import ru.andrewquiz.service.mapper.quiz.FullQuizEntityToDtoMapper;
 
 import java.util.List;
 
@@ -17,27 +19,31 @@ import java.util.List;
  */
 
 @Service
-public class FullQuizService extends AbstractResourceService<FullQuiz, FullQuizEntity, Long> {
+public class FullQuizService extends AbstractResourceService<FullQuiz, FullQuizEntity> {
 
     private FullQuizValidator validator;
 
-    private CustomDozerBeanMapper mapper;
-
     private FullQuizRepository repo;
 
+    private FullQuizDtoToEntityMapper dtoToEntityMapper;
+
+    private FullQuizEntityToDtoMapper entityToDtoMapper;
+
     @Autowired
-    public FullQuizService(FullQuizRepository repo, CustomDozerBeanMapper mapper, FullQuizValidator validator) {
+    public FullQuizService(FullQuizRepository repo, FullQuizValidator validator,
+                       FullQuizDtoToEntityMapper dtoToEntityMapper, FullQuizEntityToDtoMapper entityToDtoMapper) {
 
         this.repo = repo;
-        this.mapper = mapper;
         this.validator = validator;
+        this.entityToDtoMapper = entityToDtoMapper;
+        this.dtoToEntityMapper = dtoToEntityMapper;
     }
 
     public List<FullQuiz> getFullQuizesBySuitId(Long suitId) {
 
         Iterable<FullQuizEntity> fullQuizEntities = repo.findBySuitId(suitId);
 
-        List<FullQuiz> fullQuizes = mapper.mapList(fullQuizEntities, FullQuiz.class);
+        List<FullQuiz> fullQuizes = entityToDtoMapper.mapList(fullQuizEntities);
 
         return fullQuizes;
     }
@@ -45,11 +51,6 @@ public class FullQuizService extends AbstractResourceService<FullQuiz, FullQuizE
     @Override
     protected Class<FullQuiz> getDtoClass() {
         return FullQuiz.class;
-    }
-
-    @Override
-    protected Class<FullQuizEntity> getEntityClass() {
-        return FullQuizEntity.class;
     }
 
     @Override
@@ -63,7 +64,12 @@ public class FullQuizService extends AbstractResourceService<FullQuiz, FullQuizE
     }
 
     @Override
-    protected CustomDozerBeanMapper getMapper() {
-        return mapper;
+    protected AbstractMapper<FullQuiz, FullQuizEntity> getDtoToEntityMapper() {
+        return dtoToEntityMapper;
+    }
+
+    @Override
+    protected AbstractMapper<FullQuizEntity, FullQuiz> getEntityToDtoMapper() {
+        return entityToDtoMapper;
     }
 }

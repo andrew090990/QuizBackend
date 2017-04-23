@@ -37,6 +37,7 @@ public class QuizController {
         this.fullQuizService = fullQuizService;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
     public @ResponseBody List<Quiz> getAllQuizes(@RequestParam(defaultValue = "true", required = false) boolean includeContent) {
 
@@ -48,7 +49,7 @@ public class QuizController {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     @RequestMapping(value = "{quizId:\\d+}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
     public @ResponseBody Quiz getQuiz(@PathVariable long quizId, @RequestParam(defaultValue = "true", required = false) boolean includeContent) {
 

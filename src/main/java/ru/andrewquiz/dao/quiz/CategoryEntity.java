@@ -1,6 +1,7 @@
 package ru.andrewquiz.dao.quiz;
 
-import ru.andrewquiz.dao.AbstractEntity;
+
+import ru.andrewquiz.dao.Identifiable;
 import ru.andrewquiz.dao.Trackable;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "categories")
-public class CategoryEntity extends AbstractEntity<Long> implements Trackable {
+public class CategoryEntity implements Identifiable, Trackable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,12 +71,60 @@ public class CategoryEntity extends AbstractEntity<Long> implements Trackable {
         this.suits = suits;
     }
 
+    public void addSuit(SuitEntity suit) {
+        addSuit(suit, true);
+    }
+
+    public void addSuit(SuitEntity suit, boolean updateReference) {
+        if (suit == null) {
+            return;
+        }
+
+        if (suits.contains(suit)) {
+            suits.set(suits.indexOf(suit), suit);
+        } else {
+            suits.add(suit);
+        }
+
+        if (updateReference) {
+            suit.setCategory(this, false);
+        }
+    }
+
+    public void removeSuit(SuitEntity suit) {
+        removeSuit(suit, true);
+    }
+
+    public void removeSuit(SuitEntity suit, boolean updateReference) {
+        if (suit == null) {
+            return;
+        }
+
+        suits.remove(suit);
+
+        if (updateReference) {
+            suit.setCategory(null, false);
+        }
+    }
+
     public CategoryEntity getParentCategory() {
         return parentCategory;
     }
 
     public void setParentCategory(CategoryEntity parentCategory) {
+        setParentCategory(parentCategory, true);
+    }
+
+    public void setParentCategory(CategoryEntity parentCategory, boolean updateReference) {
+        if (this.parentCategory!= null) {
+            this.parentCategory.removeChildCategory(this, false);
+        }
+
         this.parentCategory = parentCategory;
+
+        if (parentCategory != null && updateReference) {
+            parentCategory.addChildCategory(this, false);
+        }
     }
 
     public List<CategoryEntity> getChildCategories() {
@@ -84,6 +133,42 @@ public class CategoryEntity extends AbstractEntity<Long> implements Trackable {
 
     public void setChildCategories(List<CategoryEntity> childCategories) {
         this.childCategories = childCategories;
+    }
+
+    public void addChildCategory(CategoryEntity childCategory) {
+        addChildCategory(childCategory, true);
+    }
+
+    public void addChildCategory(CategoryEntity childCategory, boolean updateReference) {
+        if (childCategory == null) {
+            return;
+        }
+
+        if (childCategories.contains(childCategory)) {
+            childCategories.set(childCategories.indexOf(childCategory), childCategory);
+        } else {
+            childCategories.add(childCategory);
+        }
+
+        if (updateReference) {
+            childCategory.setParentCategory(this, false);
+        }
+    }
+
+    public void removeChildCategory(CategoryEntity childCategory) {
+        removeChildCategory(childCategory, true);
+    }
+
+    public void removeChildCategory(CategoryEntity childCategory, boolean updateReference) {
+        if (childCategory == null) {
+            return;
+        }
+
+        childCategories.remove(childCategory);
+
+        if (updateReference) {
+            childCategory.setParentCategory(null, false);
+        }
     }
 
     public String getDescription() {
@@ -115,9 +200,22 @@ public class CategoryEntity extends AbstractEntity<Long> implements Trackable {
     }
 
     @Override
-    public void attachChildrenToParent() {
-        return;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass() || id == null) {
+            return false;
+        }
+
+        return id.equals(((CategoryEntity)o).getId());
     }
 
-    //TODO toString() for all entities, dtos; refactor EntityNotFoundException
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id.hashCode();
+    }
+
+//TODO toString() for all entities, dtos; refactor EntityNotFoundException
 }

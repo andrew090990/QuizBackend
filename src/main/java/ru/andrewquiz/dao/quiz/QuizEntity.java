@@ -1,6 +1,7 @@
 package ru.andrewquiz.dao.quiz;
 
-import ru.andrewquiz.dao.AbstractEntity;
+
+import ru.andrewquiz.dao.Identifiable;
 import ru.andrewquiz.dao.Trackable;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.Calendar;
 @Entity
 @Table(name = "quizes")
 @Inheritance (strategy=InheritanceType.JOINED)
-public class QuizEntity extends AbstractEntity<Long> implements Trackable {
+public class QuizEntity implements Identifiable, Trackable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +52,19 @@ public class QuizEntity extends AbstractEntity<Long> implements Trackable {
     }
 
     public void setSuit(SuitEntity suit) {
+        setSuit(suit, true);
+    }
+
+    public void setSuit(SuitEntity suit, boolean updateReference) {
+        if (this.suit!= null) {
+            this.suit.removeQuiz(this, false);
+        }
+
         this.suit = suit;
+
+        if (suit != null && updateReference) {
+            suit.addQuiz(this, false);
+        }
     }
 
     @Override
@@ -93,8 +106,21 @@ public class QuizEntity extends AbstractEntity<Long> implements Trackable {
     }
 
     @Override
-    public void attachChildrenToParent() {
-        return;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass() || id == null) {
+            return false;
+        }
+
+        return id.equals(((QuizEntity)o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id.hashCode();
     }
 
 }

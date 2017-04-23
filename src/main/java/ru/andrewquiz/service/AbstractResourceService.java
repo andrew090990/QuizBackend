@@ -1,14 +1,13 @@
 package ru.andrewquiz.service;
 
 import org.springframework.data.repository.CrudRepository;
-import ru.andrewquiz.dao.AbstractEntity;
+import ru.andrewquiz.dao.Identifiable;
 import ru.andrewquiz.dao.Trackable;
 import ru.andrewquiz.dto.AbstractDto;
-import ru.andrewquiz.mapper.CustomDozerBeanMapper;
 import ru.andrewquiz.rest.exception.EntityNotFoundException;
 import ru.andrewquiz.rest.exception.IllegalRequestException;
+import ru.andrewquiz.service.mapper.AbstractMapper;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 
@@ -16,37 +15,37 @@ import java.util.List;
  * Created by Andrew on 15.04.2017.
  */
 
-public abstract class AbstractResourceService<D extends AbstractDto, E extends AbstractEntity<PK>, PK extends Serializable> {
+public abstract class AbstractResourceService<D extends AbstractDto, E extends Identifiable> {
 
     protected abstract Class<D> getDtoClass();
 
-    protected abstract Class<E> getEntityClass();
-
-    protected abstract CrudRepository<E, PK> getRepo();
+    protected abstract CrudRepository<E, Long> getRepo();
 
     protected abstract Validator<D, E> getValidator();
 
-    protected abstract CustomDozerBeanMapper getMapper();
+    protected abstract AbstractMapper<D, E> getDtoToEntityMapper();
+
+    protected abstract AbstractMapper<E, D> getEntityToDtoMapper();
 
     public List<D> getAllDtos() {
 
         Iterable<E> entities = getRepo().findAll();
 
-        List<D> dtos = getMapper().mapList(entities, getDtoClass());
+        List<D> dtos = getEntityToDtoMapper().mapList(entities);
 
         return dtos;
     }
 
-    public D getDto(PK id) {
+    public D getDto(Long id) {
 
         E entity = findEntity(id);
 
-        D dto = getMapper().map(entity, getDtoClass());
+        D dto = getEntityToDtoMapper().map(entity);
 
         return dto;
     }
 
-    public PK createEntity(D dto) {
+    public Long createEntity(D dto) {
 
         //TODO validation
 
@@ -54,9 +53,7 @@ public abstract class AbstractResourceService<D extends AbstractDto, E extends A
             throw new IllegalRequestException("Id must be null when posting new resource.");
         }
 
-        E entity = getMapper().map(dto, getEntityClass());
-
-        entity.attachChildrenToParent();
+        E entity = getDtoToEntityMapper().map(dto);
 
         if (entity instanceof Trackable) {
             ((Trackable)entity).setCreatedAt(Calendar.getInstance());
@@ -65,19 +62,18 @@ public abstract class AbstractResourceService<D extends AbstractDto, E extends A
 
         getRepo().save(entity);
 
-        return (PK)entity.getId();
+        return entity.getId();
     }
 
-    public void updateEntity(D dto, PK id) {
+    public void updateEntity(D dto, Long id) {
 
         //TODO validation
 
         E oldEntity = findEntity(id);
 
-        E newEntity = getMapper().map(dto, getEntityClass());
+        E newEntity = getDtoToEntityMapper().map(dto);
 
         newEntity.setId(id);
-        newEntity.attachChildrenToParent();
 
         if (newEntity instanceof Trackable) {
             ((Trackable)newEntity).setCreatedAt(((Trackable)oldEntity).getCreatedAt());
@@ -89,7 +85,7 @@ public abstract class AbstractResourceService<D extends AbstractDto, E extends A
         getRepo().save(newEntity);
     }
 
-    public void deleteEntity(PK id) {
+    public void deleteEntity(Long id) {
 
         E entity = findEntity(id);
 
@@ -98,7 +94,7 @@ public abstract class AbstractResourceService<D extends AbstractDto, E extends A
         getRepo().delete(entity);
     }
 
-    private E findEntity(PK id) {
+    private E findEntity(Long id) {
 
         E entity = getRepo().findOne(id);
 
