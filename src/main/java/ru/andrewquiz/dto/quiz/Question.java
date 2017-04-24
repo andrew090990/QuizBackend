@@ -1,5 +1,6 @@
 package ru.andrewquiz.dto.quiz;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,9 +13,9 @@ public class Question {
 
     private String hint;
 
-    private List<Long> answers;
+    private List<Long> answers = new ArrayList<Long>();
 
-    private List<Long> keys;
+    private List<Long> keys = new ArrayList<Long>();
 
     public Long getNumber() {
         return number;

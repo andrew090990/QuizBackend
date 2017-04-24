@@ -61,7 +61,7 @@ public class QuestionsAnswersCorrelationEntity implements Serializable {
             return false;
         }
 
-        KeyEntity that = (KeyEntity)o;
+        QuestionsAnswersCorrelationEntity that = (QuestionsAnswersCorrelationEntity)o;
 
         return getAnswerId().equals(that.getAnswerId())
                 && getQuestion().equals(that.getQuestion());

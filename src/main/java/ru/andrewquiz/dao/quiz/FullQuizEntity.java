@@ -1,6 +1,7 @@
 package ru.andrewquiz.dao.quiz;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,10 +23,10 @@ public class FullQuizEntity extends QuizEntity {
     private String content;
 
     @OneToMany(mappedBy = "fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<QuestionEntity> questions;
+    private List<QuestionEntity> questions = new ArrayList<QuestionEntity>();
 
     @OneToMany(mappedBy = "fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AnswerEntity> answers;
+    private List<AnswerEntity> answers = new ArrayList<AnswerEntity>();
 
     public String getInstructions() {
         return instructions;

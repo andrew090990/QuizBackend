@@ -11,12 +11,12 @@ import java.io.Serializable;
 @Table(name = "answers")
 public class AnswerEntity implements Serializable {
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = false)
     private FullQuizEntity fullQuiz;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id", nullable = false)
     private Long id;
 

@@ -5,6 +5,7 @@ import ru.andrewquiz.dao.Identifiable;
 import ru.andrewquiz.dao.Trackable;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -40,10 +41,10 @@ public class CategoryEntity implements Identifiable, Trackable {
     private Calendar updatedAt;
 
     @OneToMany(mappedBy = "category")
-    private List<SuitEntity> suits;
+    private List<SuitEntity> suits = new ArrayList<SuitEntity>();
 
     @OneToMany(mappedBy = "parentCategory")
-    private List<CategoryEntity> childCategories;
+    private List<CategoryEntity> childCategories = new ArrayList<CategoryEntity>();
 
     @Override
     public Long getId() {

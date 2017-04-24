@@ -5,6 +5,7 @@ import ru.andrewquiz.dao.Identifiable;
 import ru.andrewquiz.dao.Trackable;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class SuitEntity implements Identifiable, Trackable {
     private Calendar updatedAt;
 
     @OneToMany(mappedBy = "suit")
-    private List<QuizEntity> quizes;
+    private List<QuizEntity> quizes = new ArrayList<QuizEntity>();
 
     @Override
     public Long getId() {

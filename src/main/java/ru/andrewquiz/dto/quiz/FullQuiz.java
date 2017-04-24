@@ -1,5 +1,6 @@
 package ru.andrewquiz.dto.quiz;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,9 +15,9 @@ public class FullQuiz extends  Quiz {
 
     private String content;
 
-    private List<Question> questions;
+    private List<Question> questions = new ArrayList<Question>();
 
-    private List<Answer> answers;
+    private List<Answer> answers = new ArrayList<Answer>();
 
     public String getInstructions() {
         return instructions;

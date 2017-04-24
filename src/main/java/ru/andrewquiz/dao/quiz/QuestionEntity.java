@@ -2,6 +2,7 @@ package ru.andrewquiz.dao.quiz;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ import java.util.List;
 @Table(name = "questions")
 public class QuestionEntity implements Serializable {
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = false)
     private FullQuizEntity fullQuiz;
@@ -21,10 +23,10 @@ public class QuestionEntity implements Serializable {
     private Long number;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<QuestionsAnswersCorrelationEntity> answers;
+    private List<QuestionsAnswersCorrelationEntity> answers = new ArrayList<QuestionsAnswersCorrelationEntity>();
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<KeyEntity> keys;
+    private List<KeyEntity> keys = new ArrayList<KeyEntity>();
 
     @Column(name = "hint")
     private String hint;

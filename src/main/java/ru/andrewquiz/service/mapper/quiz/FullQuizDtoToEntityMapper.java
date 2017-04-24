@@ -9,8 +9,6 @@ import ru.andrewquiz.dto.quiz.Question;
 import ru.andrewquiz.repository.quiz.SuitRepository;
 import ru.andrewquiz.service.mapper.AbstractMapper;
 
-import java.util.ArrayList;
-
 /**
  * Created by Andrew on 23.04.2017.
  */
@@ -25,6 +23,7 @@ public class FullQuizDtoToEntityMapper extends AbstractMapper<FullQuiz, FullQuiz
     @Autowired
     public FullQuizDtoToEntityMapper(QuizDtoToEntityMapper baseMapper, SuitRepository suitRepo) {
         this.suitRepo = suitRepo;
+        this.baseMapper = baseMapper;
     }
 
     @Override
@@ -41,12 +40,12 @@ public class FullQuizDtoToEntityMapper extends AbstractMapper<FullQuiz, FullQuiz
         dst.setInstructions(src.getInstructions());
         dst.setIntroduction(src.getIntroduction());
 
-        dst.setQuestions(new ArrayList<QuestionEntity>());
+        dst.getQuestions().clear();
         for (Question questionSrc : src.getQuestions()) {
             mapQuestion(questionSrc, dst);
         }
 
-        dst.setAnswers(new ArrayList<AnswerEntity>());
+        dst.getAnswers().clear();
         for (Answer answerSrc : src.getAnswers()) {
             mapAnswer(answerSrc, dst);
         }
@@ -66,12 +65,12 @@ public class FullQuizDtoToEntityMapper extends AbstractMapper<FullQuiz, FullQuiz
         questionDst.setHint(questionSrc.getHint());
         questionDst.setNumber(questionSrc.getNumber());
 
-        questionDst.setAnswers(new ArrayList<QuestionsAnswersCorrelationEntity>());
+        questionDst.getAnswers().clear();
         for (Long answerIdSrc : questionSrc.getAnswers()) {
             mapQuestionsAnswersCorrelation(answerIdSrc, questionDst);
         }
 
-        questionDst.setKeys(new ArrayList<KeyEntity>());
+        questionDst.getKeys().clear();
         for (Long keyAnswerIdSrc : questionSrc.getKeys()) {
             mapKey(keyAnswerIdSrc, questionDst);
         }
