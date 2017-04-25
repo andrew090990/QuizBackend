@@ -22,7 +22,7 @@ public class FullQuizEntity extends QuizEntity {
     @Column(name = "content")
     private String content;
 
-    @OneToMany(mappedBy = "fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "primaryKey.fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionEntity> questions = new ArrayList<QuestionEntity>();
 
     @OneToMany(mappedBy = "primaryKey.fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
