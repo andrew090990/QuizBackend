@@ -22,12 +22,12 @@ public class CategoryDtoToEntityMapper extends AbstractMapper<Category, Category
     }
 
     @Override
-    protected CategoryEntity perfomMapping(Category src) {
-        return perfomMapping(src, new CategoryEntity());
+    protected CategoryEntity performMapping(Category src) {
+        return performMapping(src, new CategoryEntity());
     }
 
     @Override
-    protected CategoryEntity perfomMapping(Category src, CategoryEntity dst) {
+    protected CategoryEntity performMapping(Category src, CategoryEntity dst) {
 
         dst.setDescription(src.getDescription());
         dst.setName(src.getName());

@@ -29,7 +29,7 @@ public abstract class AbstractMapper <S, D> {
             throw new MappingException("Cannot map from null value.");
         }
 
-        return perfomMapping(src);
+        return performMapping(src);
     }
 
     public D map(S src, D dst) {
@@ -41,11 +41,11 @@ public abstract class AbstractMapper <S, D> {
             throw new MappingException("Null value passed as mapping destination.");
         }
 
-        return perfomMapping(src, dst);
+        return performMapping(src, dst);
     }
 
-    protected abstract D perfomMapping(S src);
+    protected abstract D performMapping(S src);
 
-    protected abstract D perfomMapping(S src, D dst);
+    protected abstract D performMapping(S src, D dst);
 
 }

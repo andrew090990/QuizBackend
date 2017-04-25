@@ -13,12 +13,12 @@ import ru.andrewquiz.service.mapper.AbstractMapper;
 public class SuitEntityToDtoMapper extends AbstractMapper<SuitEntity, Suit> {
 
     @Override
-    protected Suit perfomMapping(SuitEntity src) {
-        return perfomMapping(src, new Suit());
+    protected Suit performMapping(SuitEntity src) {
+        return performMapping(src, new Suit());
     }
 
     @Override
-    protected Suit perfomMapping(SuitEntity src, Suit dst) {
+    protected Suit performMapping(SuitEntity src, Suit dst) {
 
         dst.setId(src.getId());
         dst.setCreatedAt(src.getCreatedAt());

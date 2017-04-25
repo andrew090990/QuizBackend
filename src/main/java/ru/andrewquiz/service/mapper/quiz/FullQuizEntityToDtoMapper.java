@@ -23,14 +23,14 @@ public class FullQuizEntityToDtoMapper extends AbstractMapper<FullQuizEntity, Fu
     }
 
     @Override
-    protected FullQuiz perfomMapping(FullQuizEntity src) {
-        return perfomMapping(src, new FullQuiz());
+    protected FullQuiz performMapping(FullQuizEntity src) {
+        return performMapping(src, new FullQuiz());
     }
 
     @Override
-    protected FullQuiz perfomMapping(FullQuizEntity src, FullQuiz dst) {
+    protected FullQuiz performMapping(FullQuizEntity src, FullQuiz dst) {
 
-        baseMapper.perfomMapping(src, dst);
+        baseMapper.performMapping(src, dst);
 
         dst.setContent(src.getContent());
         dst.setInstructions(src.getInstructions());

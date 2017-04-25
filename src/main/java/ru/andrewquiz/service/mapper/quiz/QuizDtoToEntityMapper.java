@@ -22,12 +22,12 @@ public class QuizDtoToEntityMapper extends AbstractMapper<Quiz, QuizEntity> {
     }
 
     @Override
-    protected QuizEntity perfomMapping(Quiz src) {
-        return perfomMapping(src, new QuizEntity());
+    protected QuizEntity performMapping(Quiz src) {
+        return performMapping(src, new QuizEntity());
     }
 
     @Override
-    protected QuizEntity perfomMapping(Quiz src, QuizEntity dst) {
+    protected QuizEntity performMapping(Quiz src, QuizEntity dst) {
 
         dst.setName(src.getName());
         dst.setTypeId(src.getType() != null ? src.getType().id() : null);

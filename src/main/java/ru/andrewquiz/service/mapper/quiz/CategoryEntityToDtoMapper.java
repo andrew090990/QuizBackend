@@ -13,12 +13,12 @@ import ru.andrewquiz.service.mapper.AbstractMapper;
 public class CategoryEntityToDtoMapper extends AbstractMapper<CategoryEntity, Category> {
 
     @Override
-    protected Category perfomMapping(CategoryEntity src) {
-        return perfomMapping(src, new Category());
+    protected Category performMapping(CategoryEntity src) {
+        return performMapping(src, new Category());
     }
 
     @Override
-    protected Category perfomMapping(CategoryEntity src, Category dst) {
+    protected Category performMapping(CategoryEntity src, Category dst) {
 
         dst.setId(src.getId());
         dst.setCreatedAt(src.getCreatedAt());

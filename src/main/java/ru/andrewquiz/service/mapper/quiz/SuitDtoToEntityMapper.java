@@ -22,12 +22,12 @@ public class SuitDtoToEntityMapper extends AbstractMapper<Suit, SuitEntity> {
     }
 
     @Override
-    protected SuitEntity perfomMapping(Suit src) {
-        return perfomMapping(src, new SuitEntity());
+    protected SuitEntity performMapping(Suit src) {
+        return performMapping(src, new SuitEntity());
     }
 
     @Override
-    protected SuitEntity perfomMapping(Suit src, SuitEntity dst) {
+    protected SuitEntity performMapping(Suit src, SuitEntity dst) {
 
         dst.setName(src.getName());
         dst.setCategory(src.getCategoryId() != null ? categoryRepo.findOne(src.getCategoryId()) : null);

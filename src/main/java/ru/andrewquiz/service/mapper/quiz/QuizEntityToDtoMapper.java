@@ -14,12 +14,12 @@ import ru.andrewquiz.service.mapper.AbstractMapper;
 public class QuizEntityToDtoMapper extends AbstractMapper<QuizEntity, Quiz> {
 
     @Override
-    protected Quiz perfomMapping(QuizEntity src) {
-        return perfomMapping(src, new Quiz());
+    protected Quiz performMapping(QuizEntity src) {
+        return performMapping(src, new Quiz());
     }
 
     @Override
-    protected Quiz perfomMapping(QuizEntity src, Quiz dst) {
+    protected Quiz performMapping(QuizEntity src, Quiz dst) {
 
         dst.setName(src.getName());
         dst.setId(src.getId());
