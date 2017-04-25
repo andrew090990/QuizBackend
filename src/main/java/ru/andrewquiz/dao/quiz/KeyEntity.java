@@ -1,6 +1,8 @@
 package ru.andrewquiz.dao.quiz;
 
-import javax.persistence.*;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -11,20 +13,19 @@ import java.io.Serializable;
 @Table(name = "`keys`")
 public class KeyEntity implements Serializable {
 
-    @Id
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id"),
-            @JoinColumn(name = "question_number", referencedColumnName = "question_number")
-    })
-    private QuestionEntity question;
+    @EmbeddedId
+    private KeyPK primaryKey = new KeyPK();
 
-    @Id
-    @Column(name = "answer_id")
-    private Long answerId;
+    public KeyPK getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(KeyPK primaryKey) {
+        this.primaryKey = primaryKey;
+    }
 
     public QuestionEntity getQuestion() {
-        return question;
+        return getPrimaryKey().getQuestion();
     }
 
     public void setQuestion(QuestionEntity question) {
@@ -32,11 +33,11 @@ public class KeyEntity implements Serializable {
     }
 
     public void setQuestion(QuestionEntity question, boolean updateReference) {
-        if (this.question!= null) {
-            this.question.removeKey(this, false);
+        if (getPrimaryKey().getQuestion() != null) {
+            getPrimaryKey().getQuestion().removeKey(this, false);
         }
 
-        this.question = question;
+        getPrimaryKey().setQuestion(question);
 
         if (question != null && updateReference) {
             question.addKey(this, false);
@@ -44,11 +45,11 @@ public class KeyEntity implements Serializable {
     }
 
     public Long getAnswerId() {
-        return answerId;
+        return getPrimaryKey().getAnswerId();
     }
 
     public void setAnswerId(Long answerId) {
-        this.answerId = answerId;
+        getPrimaryKey().setAnswerId(answerId);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class KeyEntity implements Serializable {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass() || getAnswerId() == null || getQuestion() == null) {
+        if (o == null || getClass() != o.getClass() || getPrimaryKey() == null) {
             return false;
         }
 
@@ -69,8 +70,8 @@ public class KeyEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = answerId != null ? answerId.hashCode() : 0;
-        result = 31 * result + (question != null ? question.hashCode() : 0);
+        int result = getPrimaryKey() != null ? getPrimaryKey().hashCode() : 0;
         return result;
     }
+
 }

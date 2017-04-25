@@ -19,7 +19,7 @@ public class QuestionEntity implements Serializable {
     @OneToMany(mappedBy = "primaryKey.question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionsAnswersCorrelationEntity> answers = new ArrayList<QuestionsAnswersCorrelationEntity>();
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "primaryKey.question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<KeyEntity> keys = new ArrayList<KeyEntity>();
 
     @Column(name = "hint")
@@ -177,4 +177,5 @@ public class QuestionEntity implements Serializable {
         int result = getPrimaryKey() != null ? getPrimaryKey().hashCode() : 0;
         return result;
     }
+
 }
