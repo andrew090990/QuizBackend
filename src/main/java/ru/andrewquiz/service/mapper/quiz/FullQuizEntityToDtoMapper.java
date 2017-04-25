@@ -58,7 +58,7 @@ public class FullQuizEntityToDtoMapper extends AbstractMapper<FullQuizEntity, Fu
         Question questionDst = new Question();
 
         questionDst.setHint(questionSrc.getHint());
-        questionDst.setNumber(questionSrc.getNumber());
+        questionDst.setNumber(questionSrc.getQuestionNumber());
 
         questionDst.getAnswers().clear();
         for (QuestionsAnswersCorrelationEntity answerSrc : questionSrc.getAnswers()) {

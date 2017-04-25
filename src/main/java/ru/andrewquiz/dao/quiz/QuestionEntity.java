@@ -13,14 +13,8 @@ import java.util.List;
 @Table(name = "questions")
 public class QuestionEntity implements Serializable {
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "quiz_id", nullable = false)
-    private FullQuizEntity fullQuiz;
-
-    @Id
-    @Column(name = "question_number", nullable = false)
-    private Long number;
+    @EmbeddedId
+    private QuestionPK primaryKey = new QuestionPK();
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionsAnswersCorrelationEntity> answers = new ArrayList<QuestionsAnswersCorrelationEntity>();
@@ -31,8 +25,16 @@ public class QuestionEntity implements Serializable {
     @Column(name = "hint")
     private String hint;
 
+    public QuestionPK getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(QuestionPK primaryKey) {
+        this.primaryKey = primaryKey;
+    }
+
     public FullQuizEntity getFullQuiz() {
-        return fullQuiz;
+        return getPrimaryKey().getFullQuiz();
     }
 
     public void setFullQuiz(FullQuizEntity fullQuiz) {
@@ -40,23 +42,23 @@ public class QuestionEntity implements Serializable {
     }
 
     public void setFullQuiz(FullQuizEntity fullQuiz, boolean updateReference) {
-        if (this.fullQuiz!= null) {
-            this.fullQuiz.removeQuestion(this, false);
+        if (getPrimaryKey().getFullQuiz()!= null) {
+            getPrimaryKey().getFullQuiz().removeQuestion(this, false);
         }
 
-        this.fullQuiz = fullQuiz;
+        getPrimaryKey().setFullQuiz(fullQuiz);
 
         if (fullQuiz != null && updateReference) {
             fullQuiz.addQuestion(this, false);
         }
     }
 
-    public Long getNumber() {
-        return number;
+    public Long getQuestionNumber() {
+        return getPrimaryKey().getQuestionNumber();
     }
 
-    public void setNumber(Long number) {
-        this.number = number;
+    public void setQuestionNumber(Long number) {
+        getPrimaryKey().setQuestionNumber(number);
     }
 
     public String getHint() {
@@ -161,20 +163,18 @@ public class QuestionEntity implements Serializable {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass() || getNumber() == null || getFullQuiz() == null) {
+        if (o == null || getClass() != o.getClass() || getPrimaryKey() == null) {
             return false;
         }
 
         QuestionEntity that = (QuestionEntity)o;
 
-        return getNumber().equals(that.getNumber())
-                && getFullQuiz().equals(that.getFullQuiz());
+        return getPrimaryKey().equals(that.getPrimaryKey());
     }
 
     @Override
     public int hashCode() {
-        int result = fullQuiz != null ? fullQuiz.hashCode() : 0;
-        result = 31 * result + (number != null ? number.hashCode() : 0);
+        int result = getPrimaryKey() != null ? getPrimaryKey().hashCode() : 0;
         return result;
     }
 }

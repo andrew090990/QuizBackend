@@ -11,14 +11,14 @@ import java.io.Serializable;
  */
 
 @Embeddable
-public class AnswerPK implements Serializable {
+public class QuestionPK implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = false)
     private FullQuizEntity fullQuiz;
 
-    @Column(name = "answer_id", nullable = false)
-    private Long answerId;
+    @Column(name = "question_number", nullable = false)
+    private Long questionNumber;
 
     protected FullQuizEntity getFullQuiz() {
         return fullQuiz;
@@ -28,12 +28,12 @@ public class AnswerPK implements Serializable {
         this.fullQuiz = fullQuiz;
     }
 
-    protected Long getAnswerId() {
-        return answerId;
+    protected Long getQuestionNumber() {
+        return questionNumber;
     }
 
-    protected void setAnswerId(Long answerId) {
-        this.answerId = answerId;
+    protected void setQuestionNumber(Long questionNumber) {
+        this.questionNumber = questionNumber;
     }
 
     @Override
@@ -41,13 +41,13 @@ public class AnswerPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AnswerPK answerPK = (AnswerPK) o;
+        QuestionPK questionPK = (QuestionPK) o;
 
-        if (fullQuiz == null || !fullQuiz.equals(answerPK.fullQuiz)) {
+        if (fullQuiz == null || !fullQuiz.equals(questionPK.fullQuiz)) {
             return false;
         }
 
-        if (answerId == null || !answerId.equals(answerPK.answerId)) {
+        if (questionNumber == null || !questionNumber.equals(questionPK.questionNumber)) {
             return false;
         }
 
@@ -57,7 +57,7 @@ public class AnswerPK implements Serializable {
     @Override
     public int hashCode() {
         int result = fullQuiz != null ? fullQuiz.hashCode() : 0;
-        result = 31 * result + (answerId != null ? answerId.hashCode() : 0);
+        result = 31 * result + (questionNumber != null ? questionNumber.hashCode() : 0);
         return result;
     }
 }

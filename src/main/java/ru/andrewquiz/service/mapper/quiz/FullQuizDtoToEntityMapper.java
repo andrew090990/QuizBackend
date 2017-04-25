@@ -63,7 +63,7 @@ public class FullQuizDtoToEntityMapper extends AbstractMapper<FullQuiz, FullQuiz
 
         questionDst.setFullQuiz(fullQuizDst);
         questionDst.setHint(questionSrc.getHint());
-        questionDst.setNumber(questionSrc.getNumber());
+        questionDst.setQuestionNumber(questionSrc.getNumber());
 
         questionDst.getAnswers().clear();
         for (Long answerIdSrc : questionSrc.getAnswers()) {
