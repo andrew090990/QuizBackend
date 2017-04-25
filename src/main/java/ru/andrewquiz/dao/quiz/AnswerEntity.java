@@ -1,6 +1,9 @@
 package ru.andrewquiz.dao.quiz;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -11,14 +14,8 @@ import java.io.Serializable;
 @Table(name = "answers")
 public class AnswerEntity implements Serializable {
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "quiz_id", nullable = false)
-    private FullQuizEntity fullQuiz;
-
-    @Id
-    @Column(name = "answer_id", nullable = false)
-    private Long id;
+    @EmbeddedId
+    private AnswerPK primaryKey = new AnswerPK();
 
     @Column(name = "content")
     private String content;
@@ -26,8 +23,16 @@ public class AnswerEntity implements Serializable {
     @Column(name = "code")
     private String code;
 
+    public AnswerPK getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(AnswerPK primaryKey) {
+        this.primaryKey = primaryKey;
+    }
+
     public FullQuizEntity getFullQuiz() {
-        return fullQuiz;
+        return getPrimaryKey().getFullQuiz();
     }
 
     public void setFullQuiz(FullQuizEntity fullQuiz) {
@@ -35,23 +40,23 @@ public class AnswerEntity implements Serializable {
     }
 
     public void setFullQuiz(FullQuizEntity fullQuiz, boolean updateReference) {
-        if (this.fullQuiz!= null) {
-            this.fullQuiz.removeAnswer(this, false);
+        if (getPrimaryKey().getFullQuiz()!= null) {
+            getPrimaryKey().getFullQuiz().removeAnswer(this, false);
         }
 
-        this.fullQuiz = fullQuiz;
+        getPrimaryKey().setFullQuiz(fullQuiz);
 
         if (fullQuiz != null && updateReference) {
             fullQuiz.addAnswer(this, false);
         }
     }
 
-    public Long getId() {
-        return id;
+    public Long getAnswerId() {
+        return getPrimaryKey().getAnswerId();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAnswerId(Long id) {
+        getPrimaryKey().setAnswerId(id);
     }
 
     public String getContent() {
@@ -76,20 +81,18 @@ public class AnswerEntity implements Serializable {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass() || getId() == null || getFullQuiz() == null) {
+        if (o == null || getClass() != o.getClass() || getPrimaryKey() == null) {
             return false;
         }
 
         AnswerEntity that = (AnswerEntity)o;
 
-        return getId().equals(that.getId())
-                && getFullQuiz().equals(that.getFullQuiz());
+        return getPrimaryKey().equals(that.getPrimaryKey());
     }
 
     @Override
     public int hashCode() {
-        int result = fullQuiz != null ? fullQuiz.hashCode() : 0;
-        result = 31 * result + (id != null ? id.hashCode() : 0);
+        int result = getPrimaryKey() != null ? getPrimaryKey().hashCode() : 0;
         return result;
     }
 }

@@ -83,6 +83,7 @@ public abstract class AbstractResourceService<D extends AbstractDto, E extends I
         }
 
         getRepo().save(newEntity);
+
     }
 
     public void deleteEntity(Long id) {

@@ -81,7 +81,7 @@ public class FullQuizEntityToDtoMapper extends AbstractMapper<FullQuizEntity, Fu
 
         Answer answerDst = new Answer();
 
-        answerDst.setId(answerSrc.getId());
+        answerDst.setId(answerSrc.getAnswerId());
         answerDst.setCode(answerSrc.getCode());
         answerDst.setContent(answerSrc.getContent());
 
