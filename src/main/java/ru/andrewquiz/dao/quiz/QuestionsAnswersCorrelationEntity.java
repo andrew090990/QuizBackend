@@ -1,6 +1,8 @@
 package ru.andrewquiz.dao.quiz;
 
-import javax.persistence.*;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -11,20 +13,19 @@ import java.io.Serializable;
 @Table(name = "questions_answers_correlation")
 public class QuestionsAnswersCorrelationEntity implements Serializable {
 
-    @Id
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "quiz_id", referencedColumnName = "quiz_id"),
-            @JoinColumn(name = "question_number", referencedColumnName = "question_number")
-    })
-    private QuestionEntity question;
+    @EmbeddedId
+    private QuestionsAnswersCorrelationPK primaryKey = new QuestionsAnswersCorrelationPK();
 
-    @Id
-    @Column(name = "answer_id")
-    private Long answerId;
+    public QuestionsAnswersCorrelationPK getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(QuestionsAnswersCorrelationPK primaryKey) {
+        this.primaryKey = primaryKey;
+    }
 
     public QuestionEntity getQuestion() {
-        return question;
+        return getPrimaryKey().getQuestion();
     }
 
     public void setQuestion(QuestionEntity question) {
@@ -32,11 +33,11 @@ public class QuestionsAnswersCorrelationEntity implements Serializable {
     }
 
     public void setQuestion(QuestionEntity question, boolean updateReference) {
-        if (this.question!= null) {
-            this.question.removeAnswer(this, false);
+        if (getPrimaryKey().getQuestion() != null) {
+            getPrimaryKey().getQuestion().removeAnswer(this, false);
         }
 
-        this.question = question;
+        getPrimaryKey().setQuestion(question);
 
         if (question != null && updateReference) {
             question.addAnswer(this, false);
@@ -44,11 +45,11 @@ public class QuestionsAnswersCorrelationEntity implements Serializable {
     }
 
     public Long getAnswerId() {
-        return answerId;
+        return getPrimaryKey().getAnswerId();
     }
 
     public void setAnswerId(Long answerId) {
-        this.answerId = answerId;
+        getPrimaryKey().setAnswerId(answerId);
     }
 
     @Override
@@ -57,20 +58,18 @@ public class QuestionsAnswersCorrelationEntity implements Serializable {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass() || getAnswerId() == null || getQuestion() == null) {
+        if (o == null || getClass() != o.getClass() || getPrimaryKey() == null) {
             return false;
         }
 
         QuestionsAnswersCorrelationEntity that = (QuestionsAnswersCorrelationEntity)o;
 
-        return getAnswerId().equals(that.getAnswerId())
-                && getQuestion().equals(that.getQuestion());
+        return getPrimaryKey().equals(that.getPrimaryKey());
     }
 
     @Override
     public int hashCode() {
-        int result = answerId != null ? answerId.hashCode() : 0;
-        result = 31 * result + (question != null ? question.hashCode() : 0);
+        int result = getPrimaryKey() != null ? getPrimaryKey().hashCode() : 0;
         return result;
     }
 }

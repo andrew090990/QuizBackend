@@ -1,6 +1,7 @@
 package ru.andrewquiz.dao.quiz;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "quiz_contents")
 @PrimaryKeyJoinColumn (name="quiz_id")
-public class FullQuizEntity extends QuizEntity {
+public class FullQuizEntity extends QuizEntity implements Serializable {
 
     @Column(name = "instructions")
     private String instructions;

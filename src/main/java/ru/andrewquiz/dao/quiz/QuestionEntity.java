@@ -16,7 +16,7 @@ public class QuestionEntity implements Serializable {
     @EmbeddedId
     private QuestionPK primaryKey = new QuestionPK();
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "primaryKey.question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionsAnswersCorrelationEntity> answers = new ArrayList<QuestionsAnswersCorrelationEntity>();
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
