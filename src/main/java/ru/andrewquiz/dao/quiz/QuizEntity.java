@@ -5,6 +5,7 @@ import ru.andrewquiz.dao.Identifiable;
 import ru.andrewquiz.dao.Trackable;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Calendar;
 @Entity
 @Table(name = "quizes")
 @Inheritance (strategy=InheritanceType.JOINED)
-public class QuizEntity implements Identifiable, Trackable {
+public class QuizEntity implements Identifiable, Trackable, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

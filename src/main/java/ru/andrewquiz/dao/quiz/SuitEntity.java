@@ -5,6 +5,7 @@ import ru.andrewquiz.dao.Identifiable;
 import ru.andrewquiz.dao.Trackable;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "suits")
-public class SuitEntity implements Identifiable, Trackable {
+public class SuitEntity implements Identifiable, Trackable, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
