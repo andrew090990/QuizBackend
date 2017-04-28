@@ -2,7 +2,9 @@ package ru.andrewquiz.service.mapper.quiz;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.andrewquiz.dao.quiz.*;
+import ru.andrewquiz.dao.quiz.AnswerEntity;
+import ru.andrewquiz.dao.quiz.FullQuizEntity;
+import ru.andrewquiz.dao.quiz.QuestionEntity;
 import ru.andrewquiz.dto.quiz.Answer;
 import ru.andrewquiz.dto.quiz.FullQuiz;
 import ru.andrewquiz.dto.quiz.Question;
@@ -10,6 +12,7 @@ import ru.andrewquiz.repository.quiz.SuitRepository;
 import ru.andrewquiz.service.mapper.AbstractMapper;
 import ru.andrewquiz.service.mapper.MappingException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,51 +46,69 @@ public class FullQuizDtoToEntityMapper extends AbstractMapper<FullQuiz, FullQuiz
         dst.setInstructions(src.getInstructions());
         dst.setIntroduction(src.getIntroduction());
 
+        List<AnswerEntity> oldAnswers = new ArrayList<AnswerEntity>(dst.getAnswers());
         dst.getAnswers().clear();
         for (Answer answerSrc : src.getAnswers()) {
-            mapAnswer(answerSrc, dst);
+            AnswerEntity oldAnswer = findAnswer(oldAnswers, answerSrc.getAnswerNumber());
+            if (oldAnswer == null) {
+                mapAnswer(answerSrc, new AnswerEntity(), dst);
+            } else {
+                mapAnswer(answerSrc, oldAnswer, dst);
+            }
         }
 
+        List<QuestionEntity> oldQuestions = new ArrayList<QuestionEntity>(dst.getQuestions());
         dst.getQuestions().clear();
         for (Question questionSrc : src.getQuestions()) {
-            mapQuestion(questionSrc, dst);
+            QuestionEntity oldQuestion = findQuestion(oldQuestions, questionSrc.getQuestionNumber());
+            if (oldQuestion == null) {
+                mapQuestion(questionSrc, new QuestionEntity(), dst);
+            } else {
+                mapQuestion(questionSrc, oldQuestion, dst);
+            }
         }
 
         return dst;
     }
 
-    private QuestionEntity mapQuestion(Question questionSrc, FullQuizEntity fullQuizDst) {
+    private QuestionEntity mapQuestion(Question questionSrc, QuestionEntity questionDst, FullQuizEntity fullQuizDst) {
 
         if (questionSrc == null) {
             return null;
         }
 
-        QuestionEntity questionDst = new QuestionEntity();
-
         questionDst.setFullQuiz(fullQuizDst);
         questionDst.setHint(questionSrc.getHint());
-        questionDst.setQuestionNumber(questionSrc.getNumber());
+        questionDst.setQuestionNumber(questionSrc.getQuestionNumber());
 
         questionDst.getAnswers().clear();
         for (Long answerNumberSrc : questionSrc.getAnswers()) {
-            questionDst.getAnswers().add(findAnswer(fullQuizDst.getAnswers(), answerNumberSrc));
+            AnswerEntity answer = findAnswer(fullQuizDst.getAnswers(), answerNumberSrc);
+            if (answer == null) {
+                throw new MappingException("Answer option refers to a non-existing answer; answerNumber: " + answerNumberSrc);
+            } else {
+                questionDst.getAnswers().add(answer);
+            }
         }
 
         questionDst.getKeys().clear();
         for (Long answerNumberSrc : questionSrc.getKeys()) {
-            questionDst.getAnswers().add(findAnswer(fullQuizDst.getAnswers(), answerNumberSrc));
+            AnswerEntity answer = findAnswer(fullQuizDst.getAnswers(), answerNumberSrc);
+            if (answer == null) {
+                throw new MappingException("Key refers to a non-existing answer; answerNumber: " + answerNumberSrc);
+            } else {
+                questionDst.getKeys().add(answer);
+            }
         }
 
         return questionDst;
     }
 
-    private AnswerEntity mapAnswer(Answer answerSrc, FullQuizEntity dst) {
+    private AnswerEntity mapAnswer(Answer answerSrc, AnswerEntity answerDst, FullQuizEntity dst) {
 
         if (answerSrc == null) {
             return null;
         }
-
-        AnswerEntity answerDst = new AnswerEntity();
 
         answerDst.setFullQuiz(dst);
         answerDst.setAnswerNumber(answerSrc.getAnswerNumber());
@@ -95,6 +116,17 @@ public class FullQuizDtoToEntityMapper extends AbstractMapper<FullQuiz, FullQuiz
         answerDst.setContent(answerSrc.getContent());
 
         return answerDst;
+    }
+
+    private QuestionEntity findQuestion(List<QuestionEntity> questionsDst, Long questionNumberSrc) {
+
+        for (QuestionEntity question : questionsDst) {
+            if (question.getQuestionNumber().equals(questionNumberSrc)) {
+                return question;
+            }
+        }
+
+        return null;
     }
 
     private AnswerEntity findAnswer(List<AnswerEntity> answersDst, Long answerNumberSrc) {
@@ -105,6 +137,6 @@ public class FullQuizDtoToEntityMapper extends AbstractMapper<FullQuiz, FullQuiz
             }
         }
 
-        throw new MappingException("Key refers to a non-existing answer; answerNumber: " + answerNumberSrc);
+        return null;
     }
 }

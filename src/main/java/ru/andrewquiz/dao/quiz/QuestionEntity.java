@@ -27,14 +27,14 @@ public class QuestionEntity implements Serializable {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "questions_answers",
+            name = "questions_answers_options",
             joinColumns = @JoinColumn(name = "question_id", referencedColumnName = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "answer_id", referencedColumnName = "answer_id"))
     private List<AnswerEntity> answers = new ArrayList<AnswerEntity>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "`keys`",
+            name = "questions_answers_keys",
             joinColumns = @JoinColumn(name = "question_id", referencedColumnName = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "answer_id", referencedColumnName = "answer_id"))//TODO orphan removal
     private List<AnswerEntity> keys = new ArrayList<AnswerEntity>();

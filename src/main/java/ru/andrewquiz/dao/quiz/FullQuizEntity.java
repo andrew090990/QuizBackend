@@ -23,7 +23,7 @@ public class FullQuizEntity extends QuizEntity implements Serializable {
     @Column(name = "content")
     private String content;
 
-    @OneToMany(mappedBy = "primaryKey.fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionEntity> questions = new ArrayList<QuestionEntity>();
 
     @OneToMany(mappedBy = "fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)

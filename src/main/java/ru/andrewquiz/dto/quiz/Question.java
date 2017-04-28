@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Question {
 
-    private Long number;
+    private Long questionNumber;
 
     private String hint;
 
@@ -17,12 +17,12 @@ public class Question {
 
     private List<Long> keys = new ArrayList<Long>();
 
-    public Long getNumber() {
-        return number;
+    public Long getQuestionNumber() {
+        return questionNumber;
     }
 
-    public void setNumber(Long number) {
-        this.number = number;
+    public void setQuestionNumber(Long questionNumber) {
+        this.questionNumber = questionNumber;
     }
 
     public String getHint() {

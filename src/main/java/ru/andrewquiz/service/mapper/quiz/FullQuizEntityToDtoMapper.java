@@ -2,7 +2,9 @@ package ru.andrewquiz.service.mapper.quiz;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.andrewquiz.dao.quiz.*;
+import ru.andrewquiz.dao.quiz.AnswerEntity;
+import ru.andrewquiz.dao.quiz.FullQuizEntity;
+import ru.andrewquiz.dao.quiz.QuestionEntity;
 import ru.andrewquiz.dto.quiz.Answer;
 import ru.andrewquiz.dto.quiz.FullQuiz;
 import ru.andrewquiz.dto.quiz.Question;
@@ -58,7 +60,7 @@ public class FullQuizEntityToDtoMapper extends AbstractMapper<FullQuizEntity, Fu
         Question questionDst = new Question();
 
         questionDst.setHint(questionSrc.getHint());
-        questionDst.setNumber(questionSrc.getQuestionNumber());
+        questionDst.setQuestionNumber(questionSrc.getQuestionNumber());
 
         questionDst.getAnswers().clear();
         for (AnswerEntity answerSrc : questionSrc.getAnswers()) {

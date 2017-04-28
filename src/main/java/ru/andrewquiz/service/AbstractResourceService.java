@@ -71,13 +71,11 @@ public abstract class AbstractResourceService<D extends AbstractDto, E extends I
 
         E oldEntity = findEntity(id);
 
-        E newEntity = getDtoToEntityMapper().map(dto);
+        E newEntity = getDtoToEntityMapper().map(dto, oldEntity);
 
         newEntity.setId(id);
 
         if (newEntity instanceof Trackable) {
-            ((Trackable)newEntity).setCreatedAt(((Trackable)oldEntity).getCreatedAt());
-
             ((Trackable)newEntity).setUpdatedAt(Calendar.getInstance());
             ((Trackable)newEntity).getUpdatedAt().clear(Calendar.MILLISECOND);
         }
