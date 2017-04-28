@@ -25,7 +25,7 @@ public class FullQuizEntity extends QuizEntity {
     @OneToMany(mappedBy = "fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionEntity> questions = new ArrayList<QuestionEntity>();
 
-    @OneToMany(mappedBy = "primaryKey.fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "fullQuiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AnswerEntity> answers = new ArrayList<AnswerEntity>();
 
     public String getInstructions() {

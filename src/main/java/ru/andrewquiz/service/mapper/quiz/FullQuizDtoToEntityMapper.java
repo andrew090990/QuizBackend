@@ -8,6 +8,9 @@ import ru.andrewquiz.dto.quiz.FullQuiz;
 import ru.andrewquiz.dto.quiz.Question;
 import ru.andrewquiz.repository.quiz.SuitRepository;
 import ru.andrewquiz.service.mapper.AbstractMapper;
+import ru.andrewquiz.service.mapper.MappingException;
+
+import java.util.List;
 
 /**
  * Created by Andrew on 23.04.2017.
@@ -40,14 +43,14 @@ public class FullQuizDtoToEntityMapper extends AbstractMapper<FullQuiz, FullQuiz
         dst.setInstructions(src.getInstructions());
         dst.setIntroduction(src.getIntroduction());
 
-        dst.getQuestions().clear();
-        for (Question questionSrc : src.getQuestions()) {
-            mapQuestion(questionSrc, dst);
-        }
-
         dst.getAnswers().clear();
         for (Answer answerSrc : src.getAnswers()) {
             mapAnswer(answerSrc, dst);
+        }
+
+        dst.getQuestions().clear();
+        for (Question questionSrc : src.getQuestions()) {
+            mapQuestion(questionSrc, dst);
         }
 
         return dst;
@@ -66,44 +69,16 @@ public class FullQuizDtoToEntityMapper extends AbstractMapper<FullQuiz, FullQuiz
         questionDst.setQuestionNumber(questionSrc.getNumber());
 
         questionDst.getAnswers().clear();
-        for (Long answerIdSrc : questionSrc.getAnswers()) {
-            mapQuestionsAnswersCorrelation(answerIdSrc, questionDst);
+        for (Long answerNumberSrc : questionSrc.getAnswers()) {
+            questionDst.getAnswers().add(findAnswer(fullQuizDst.getAnswers(), answerNumberSrc));
         }
 
         questionDst.getKeys().clear();
-        for (Long keyAnswerIdSrc : questionSrc.getKeys()) {
-            mapKey(keyAnswerIdSrc, questionDst);
+        for (Long answerNumberSrc : questionSrc.getKeys()) {
+            questionDst.getAnswers().add(findAnswer(fullQuizDst.getAnswers(), answerNumberSrc));
         }
 
         return questionDst;
-    }
-
-    private QuestionsAnswersCorrelationEntity mapQuestionsAnswersCorrelation(Long answerIdSrc, QuestionEntity questionDst) {
-
-        if (answerIdSrc == null) {
-            return null;
-        }
-
-        QuestionsAnswersCorrelationEntity answerDst = new QuestionsAnswersCorrelationEntity();
-
-        answerDst.setAnswerId(answerIdSrc);
-        answerDst.setQuestion(questionDst);
-
-        return answerDst;
-    }
-
-    private KeyEntity mapKey(Long keyAnswerIdSrc, QuestionEntity questionDst) {
-
-        if (keyAnswerIdSrc == null) {
-            return null;
-        }
-
-        KeyEntity keyDst = new KeyEntity();
-
-        keyDst.setAnswerId(keyAnswerIdSrc);
-        keyDst.setQuestion(questionDst);
-
-        return keyDst;
     }
 
     private AnswerEntity mapAnswer(Answer answerSrc, FullQuizEntity dst) {
@@ -115,10 +90,21 @@ public class FullQuizDtoToEntityMapper extends AbstractMapper<FullQuiz, FullQuiz
         AnswerEntity answerDst = new AnswerEntity();
 
         answerDst.setFullQuiz(dst);
-        answerDst.setAnswerId(answerSrc.getId());
+        answerDst.setAnswerNumber(answerSrc.getAnswerNumber());
         answerDst.setCode(answerSrc.getCode());
         answerDst.setContent(answerSrc.getContent());
 
         return answerDst;
+    }
+
+    private AnswerEntity findAnswer(List<AnswerEntity> answersDst, Long answerNumberSrc) {
+
+        for (AnswerEntity answer : answersDst) {
+            if (answer.getAnswerNumber().equals(answerNumberSrc)) {
+                return answer;
+            }
+        }
+
+        throw new MappingException("Key refers to a non-existing answer; answerNumber: " + answerNumberSrc);
     }
 }

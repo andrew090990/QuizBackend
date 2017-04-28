@@ -36,14 +36,14 @@ public class FullQuizEntityToDtoMapper extends AbstractMapper<FullQuizEntity, Fu
         dst.setInstructions(src.getInstructions());
         dst.setIntroduction(src.getIntroduction());
 
-        dst.getQuestions().clear();
-        for (QuestionEntity questionSrc : src.getQuestions()) {
-           dst.getQuestions().add(mapQuestion(questionSrc));
-        }
-
         dst.getAnswers().clear();
         for (AnswerEntity answerSrc : src.getAnswers()) {
             dst.getAnswers().add(mapAnswer(answerSrc));
+        }
+
+        dst.getQuestions().clear();
+        for (QuestionEntity questionSrc : src.getQuestions()) {
+           dst.getQuestions().add(mapQuestion(questionSrc));
         }
 
         return dst;
@@ -61,13 +61,13 @@ public class FullQuizEntityToDtoMapper extends AbstractMapper<FullQuizEntity, Fu
         questionDst.setNumber(questionSrc.getQuestionNumber());
 
         questionDst.getAnswers().clear();
-        for (QuestionsAnswersCorrelationEntity answerSrc : questionSrc.getAnswers()) {
-            questionDst.getAnswers().add(answerSrc != null ? answerSrc.getAnswerId() : null);
+        for (AnswerEntity answerSrc : questionSrc.getAnswers()) {
+            questionDst.getAnswers().add(answerSrc != null ? answerSrc.getAnswerNumber() : null);
         }
 
         questionDst.getKeys().clear();
-        for (KeyEntity keySrc : questionSrc.getKeys()) {
-            questionDst.getKeys().add(keySrc != null ? keySrc.getAnswerId() : null);
+        for (AnswerEntity keySrc : questionSrc.getKeys()) {
+            questionDst.getKeys().add(keySrc != null ? keySrc.getAnswerNumber() : null);
         }
 
         return questionDst;
@@ -81,7 +81,7 @@ public class FullQuizEntityToDtoMapper extends AbstractMapper<FullQuizEntity, Fu
 
         Answer answerDst = new Answer();
 
-        answerDst.setId(answerSrc.getAnswerId());
+        answerDst.setAnswerNumber(answerSrc.getAnswerNumber());
         answerDst.setCode(answerSrc.getCode());
         answerDst.setContent(answerSrc.getContent());
 

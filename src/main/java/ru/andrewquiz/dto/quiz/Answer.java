@@ -6,18 +6,18 @@ package ru.andrewquiz.dto.quiz;
 
 public class Answer {
 
-    private Long id;
+    private Long answerNumber;
 
     private String content;
 
     private String code;
 
-    public Long getId() {
-        return id;
+    public Long getAnswerNumber() {
+        return answerNumber;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAnswerNumber(Long answerNumber) {
+        this.answerNumber = answerNumber;
     }
 
     public String getContent() {

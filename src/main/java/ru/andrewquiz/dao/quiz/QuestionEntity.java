@@ -10,31 +10,48 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "questions")
+@Table(name = "questions", uniqueConstraints = @UniqueConstraint(columnNames = {"quiz_id", "question_number"}))
 public class QuestionEntity implements Serializable {
 
-    @EmbeddedId
-    private QuestionPK primaryKey = new QuestionPK();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "question_id", nullable = false)
+    private Long questionId;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<QuestionsAnswersCorrelationEntity> answers = new ArrayList<QuestionsAnswersCorrelationEntity>();
+    @ManyToOne
+    @JoinColumn(name = "quiz_id", nullable = false)
+    private FullQuizEntity fullQuiz;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<KeyEntity> keys = new ArrayList<KeyEntity>();
+    @Column(name = "question_number", nullable = false)
+    private Long questionNumber;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "questions_answers",
+            joinColumns = @JoinColumn(name = "question_id", referencedColumnName = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "answer_id", referencedColumnName = "answer_id"))
+    private List<AnswerEntity> answers = new ArrayList<AnswerEntity>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "`keys`",
+            joinColumns = @JoinColumn(name = "question_id", referencedColumnName = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "answer_id", referencedColumnName = "answer_id"))//TODO orphan removal
+    private List<AnswerEntity> keys = new ArrayList<AnswerEntity>();
 
     @Column(name = "hint")
     private String hint;
 
-    public QuestionPK getPrimaryKey() {
-        return primaryKey;
+    public Long getQuestionId() {
+        return questionId;
     }
 
-    public void setPrimaryKey(QuestionPK primaryKey) {
-        this.primaryKey = primaryKey;
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
     }
 
     public FullQuizEntity getFullQuiz() {
-        return getPrimaryKey().getFullQuiz();
+        return this.fullQuiz;
     }
 
     public void setFullQuiz(FullQuizEntity fullQuiz) {
@@ -42,11 +59,11 @@ public class QuestionEntity implements Serializable {
     }
 
     public void setFullQuiz(FullQuizEntity fullQuiz, boolean updateReference) {
-        if (getPrimaryKey().getFullQuiz()!= null) {
-            getPrimaryKey().getFullQuiz().removeQuestion(this, false);
+        if (this.fullQuiz != null) {
+            this.fullQuiz.removeQuestion(this, false);
         }
 
-        getPrimaryKey().setFullQuiz(fullQuiz);
+        this.fullQuiz = fullQuiz;
 
         if (fullQuiz != null && updateReference) {
             fullQuiz.addQuestion(this, false);
@@ -54,11 +71,11 @@ public class QuestionEntity implements Serializable {
     }
 
     public Long getQuestionNumber() {
-        return getPrimaryKey().getQuestionNumber();
+        return this.questionNumber;
     }
 
     public void setQuestionNumber(Long number) {
-        getPrimaryKey().setQuestionNumber(number);
+        this.questionNumber = number;
     }
 
     public String getHint() {
@@ -69,92 +86,20 @@ public class QuestionEntity implements Serializable {
         this.hint = hint;
     }
 
-    public List<QuestionsAnswersCorrelationEntity> getAnswers() {
+    public List<AnswerEntity> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<QuestionsAnswersCorrelationEntity> answers) {
+    public void setAnswers(List<AnswerEntity> answers) {
         this.answers = answers;
     }
 
-    public void addAnswer(QuestionsAnswersCorrelationEntity answer) {
-        addAnswer(answer, true);
-    }
-
-    public void addAnswer(QuestionsAnswersCorrelationEntity answer, boolean updateReference) {
-        if (answer == null) {
-            return;
-        }
-
-        if (answers.contains(answer)) {
-            answers.set(answers.indexOf(answer), answer);
-        } else {
-            answers.add(answer);
-        }
-
-        if (updateReference) {
-            answer.setQuestion(this, false);
-        }
-    }
-
-    public void removeAnswer(QuestionsAnswersCorrelationEntity answer) {
-        removeAnswer(answer, true);
-    }
-
-    public void removeAnswer(QuestionsAnswersCorrelationEntity answer, boolean updateReference) {
-        if (answer == null) {
-            return;
-        }
-
-        answers.remove(answer);
-
-        if (updateReference) {
-            answer.setQuestion(null, false);
-        }
-    }
-
-    public List<KeyEntity> getKeys() {
+    public List<AnswerEntity> getKeys() {
         return keys;
     }
 
-    public void setKeys(List<KeyEntity> keys) {
+    public void setKeys(List<AnswerEntity> keys) {
         this.keys = keys;
-    }
-
-    public void addKey(KeyEntity key) {
-        addKey(key, true);
-    }
-
-    public void addKey(KeyEntity key, boolean updateReference) {
-        if (key == null) {
-            return;
-        }
-
-        if (keys.contains(key)) {
-            keys.set(keys.indexOf(key), key);
-        } else {
-            keys.add(key);
-        }
-
-        if (updateReference) {
-            key.setQuestion(this, false);
-        }
-    }
-
-    public void removeKey(KeyEntity key) {
-        removeKey(key, true);
-    }
-
-    public void removeKey(KeyEntity key, boolean updateReference) {
-        if (key == null) {
-            return;
-        }
-
-        keys.remove(key);
-
-        if (updateReference) {
-            key.setQuestion(null, false);
-        }
     }
 
     @Override
@@ -163,18 +108,20 @@ public class QuestionEntity implements Serializable {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass() || getPrimaryKey() == null) {
+        if (o == null || getClass() != o.getClass() || this.fullQuiz == null || this.questionNumber == null) {
             return false;
         }
 
         QuestionEntity that = (QuestionEntity)o;
 
-        return getPrimaryKey().equals(that.getPrimaryKey());
+        return this.fullQuiz.equals(that.fullQuiz) && this.questionNumber.equals(that.questionNumber);
     }
 
     @Override
     public int hashCode() {
-        int result = getPrimaryKey() != null ? getPrimaryKey().hashCode() : 0;
+        int result = fullQuiz != null ? fullQuiz.hashCode() : 0;
+        result = 31 * result + (questionNumber != null ? questionNumber.hashCode() : 0);
+
         return result;
     }
 }
