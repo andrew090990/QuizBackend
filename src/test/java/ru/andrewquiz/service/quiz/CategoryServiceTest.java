@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.andrewquiz.dao.quiz.CategoryEntity;
+import ru.andrewquiz.dao.quiz.SuitEntity;
 import ru.andrewquiz.dto.quiz.Category;
 import ru.andrewquiz.repository.quiz.CategoryRepository;
 import ru.andrewquiz.rest.exception.EntityNotFoundException;
@@ -43,6 +44,9 @@ public class CategoryServiceTest {
     @Autowired
     CategoryEntity categoryEntity3;
 
+    @Autowired
+    SuitEntity suitEntity1;
+
     @Before
     public void initMocks(){
         MockitoAnnotations.initMocks(this);
@@ -66,6 +70,7 @@ public class CategoryServiceTest {
 
     @Test(expected = IllegalDeletionException.class)
     public void testDeleteCategoryWhenDependentCategories() {
+        categoryEntity1.addChildCategory(categoryEntity2);
 
         when(repo.findOne(categoryEntity1.getId())).thenReturn(categoryEntity1);
 
@@ -74,6 +79,7 @@ public class CategoryServiceTest {
 
     @Test(expected = IllegalDeletionException.class)
     public void testDeleteCategoryWhenDependentSuits() {
+        categoryEntity2.addSuit(suitEntity1);
 
         when(repo.findOne(categoryEntity2.getId())).thenReturn(categoryEntity2);
 
@@ -82,6 +88,8 @@ public class CategoryServiceTest {
 
     @Test
     public void testDeleteCategoryWhenNoDependents() {
+        categoryEntity3.getChildCategories().clear();
+        categoryEntity3.getSuits().clear();
 
         when(repo.findOne(categoryEntity3.getId())).thenReturn(categoryEntity3);
 

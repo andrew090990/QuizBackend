@@ -118,7 +118,7 @@ public class CategoryEntity implements Identifiable, Trackable, Serializable {
     }
 
     protected void setParentCategory(CategoryEntity parentCategory, boolean updateReference) {
-        if (this.parentCategory!= null) {
+        if (this.parentCategory != null) {
             this.parentCategory.removeChildCategory(this, false);
         }
 
