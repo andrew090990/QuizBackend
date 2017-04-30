@@ -56,7 +56,7 @@ public class QuizEntity implements Identifiable, Trackable, Serializable {
         setSuit(suit, true);
     }
 
-    public void setSuit(SuitEntity suit, boolean updateReference) {
+    protected void setSuit(SuitEntity suit, boolean updateReference) {
         if (this.suit!= null) {
             this.suit.removeQuiz(this, false);
         }

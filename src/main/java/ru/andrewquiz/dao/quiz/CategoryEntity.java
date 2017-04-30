@@ -77,7 +77,7 @@ public class CategoryEntity implements Identifiable, Trackable, Serializable {
         addSuit(suit, true);
     }
 
-    public void addSuit(SuitEntity suit, boolean updateReference) {
+    protected void addSuit(SuitEntity suit, boolean updateReference) {
         if (suit == null) {
             return;
         }
@@ -97,7 +97,7 @@ public class CategoryEntity implements Identifiable, Trackable, Serializable {
         removeSuit(suit, true);
     }
 
-    public void removeSuit(SuitEntity suit, boolean updateReference) {
+    protected void removeSuit(SuitEntity suit, boolean updateReference) {
         if (suit == null) {
             return;
         }
@@ -117,7 +117,7 @@ public class CategoryEntity implements Identifiable, Trackable, Serializable {
         setParentCategory(parentCategory, true);
     }
 
-    public void setParentCategory(CategoryEntity parentCategory, boolean updateReference) {
+    protected void setParentCategory(CategoryEntity parentCategory, boolean updateReference) {
         if (this.parentCategory!= null) {
             this.parentCategory.removeChildCategory(this, false);
         }
@@ -141,7 +141,7 @@ public class CategoryEntity implements Identifiable, Trackable, Serializable {
         addChildCategory(childCategory, true);
     }
 
-    public void addChildCategory(CategoryEntity childCategory, boolean updateReference) {
+    protected void addChildCategory(CategoryEntity childCategory, boolean updateReference) {
         if (childCategory == null) {
             return;
         }
@@ -161,7 +161,7 @@ public class CategoryEntity implements Identifiable, Trackable, Serializable {
         removeChildCategory(childCategory, true);
     }
 
-    public void removeChildCategory(CategoryEntity childCategory, boolean updateReference) {
+    protected void removeChildCategory(CategoryEntity childCategory, boolean updateReference) {
         if (childCategory == null) {
             return;
         }

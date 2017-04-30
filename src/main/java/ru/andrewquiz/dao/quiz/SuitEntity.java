@@ -67,7 +67,7 @@ public class SuitEntity implements Identifiable, Trackable, Serializable {
         setCategory(category, true);
     }
 
-    public void setCategory(CategoryEntity category, boolean updateReference) {
+    protected void setCategory(CategoryEntity category, boolean updateReference) {
         if (this.category!= null) {
             this.category.removeSuit(this, false);
         }
@@ -111,7 +111,7 @@ public class SuitEntity implements Identifiable, Trackable, Serializable {
         addQuiz(quiz, true);
     }
 
-    public void addQuiz(QuizEntity quiz, boolean updateReference) {
+    protected void addQuiz(QuizEntity quiz, boolean updateReference) {
         if (quiz == null) {
             return;
         }
@@ -131,7 +131,7 @@ public class SuitEntity implements Identifiable, Trackable, Serializable {
         removeQuiz(quiz, true);
     }
 
-    public void removeQuiz(QuizEntity quiz, boolean updateReference) {
+    protected void removeQuiz(QuizEntity quiz, boolean updateReference) {
         if (quiz == null) {
             return;
         }

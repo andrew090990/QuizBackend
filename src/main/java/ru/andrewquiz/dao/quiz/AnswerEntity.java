@@ -37,15 +37,7 @@ public class AnswerEntity implements Serializable {
         setFullQuiz(fullQuiz, true);
     }
 
-    public Long getAnswerNumber() {
-        return answerNumber;
-    }
-
-    public void setAnswerNumber(Long answerNumber) {
-        this.answerNumber = answerNumber;
-    }
-
-    public void setFullQuiz(FullQuizEntity fullQuiz, boolean updateReference) {
+    protected void setFullQuiz(FullQuizEntity fullQuiz, boolean updateReference) {
         if (this.fullQuiz != null) {
             this.fullQuiz.removeAnswer(this, false);
         }
@@ -55,6 +47,14 @@ public class AnswerEntity implements Serializable {
         if (fullQuiz != null && updateReference) {
             fullQuiz.addAnswer(this, false);
         }
+    }
+
+    public Long getAnswerNumber() {
+        return answerNumber;
+    }
+
+    public void setAnswerNumber(Long answerNumber) {
+        this.answerNumber = answerNumber;
     }
 
     public Long getAnswerId() {

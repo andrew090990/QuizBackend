@@ -58,7 +58,7 @@ public class QuestionEntity implements Serializable {
         setFullQuiz(fullQuiz, true);
     }
 
-    public void setFullQuiz(FullQuizEntity fullQuiz, boolean updateReference) {
+    protected void setFullQuiz(FullQuizEntity fullQuiz, boolean updateReference) {
         if (this.fullQuiz != null) {
             this.fullQuiz.removeQuestion(this, false);
         }

@@ -65,7 +65,7 @@ public class FullQuizEntity extends QuizEntity implements Serializable {
         addQuestion(question, true);
     }
 
-    public void addQuestion(QuestionEntity question, boolean updateReference) {
+    protected void addQuestion(QuestionEntity question, boolean updateReference) {
         if (question == null) {
             return;
         }
@@ -85,7 +85,7 @@ public class FullQuizEntity extends QuizEntity implements Serializable {
         removeQuestion(question, true);
     }
 
-    public void removeQuestion(QuestionEntity question, boolean updateReference) {
+    protected void removeQuestion(QuestionEntity question, boolean updateReference) {
         if (question == null) {
             return;
         }
@@ -109,7 +109,7 @@ public class FullQuizEntity extends QuizEntity implements Serializable {
         addAnswer(answer, true);
     }
 
-    public void addAnswer(AnswerEntity answer, boolean updateReference) {
+    protected void addAnswer(AnswerEntity answer, boolean updateReference) {
         if (answer == null) {
             return;
         }
@@ -129,7 +129,7 @@ public class FullQuizEntity extends QuizEntity implements Serializable {
         removeAnswer(answer, true);
     }
 
-    public void removeAnswer(AnswerEntity answer, boolean updateReference) {
+    protected void removeAnswer(AnswerEntity answer, boolean updateReference) {
         if (answer == null) {
             return;
         }
