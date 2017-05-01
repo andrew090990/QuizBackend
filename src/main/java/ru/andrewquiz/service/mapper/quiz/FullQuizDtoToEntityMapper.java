@@ -8,7 +8,6 @@ import ru.andrewquiz.dao.quiz.QuestionEntity;
 import ru.andrewquiz.dto.quiz.Answer;
 import ru.andrewquiz.dto.quiz.FullQuiz;
 import ru.andrewquiz.dto.quiz.Question;
-import ru.andrewquiz.repository.quiz.SuitRepository;
 import ru.andrewquiz.service.mapper.AbstractMapper;
 import ru.andrewquiz.service.mapper.MappingException;
 
@@ -24,11 +23,8 @@ public class FullQuizDtoToEntityMapper extends AbstractMapper<FullQuiz, FullQuiz
 
     private QuizDtoToEntityMapper baseMapper;
 
-    private SuitRepository suitRepo;
-
     @Autowired
-    public FullQuizDtoToEntityMapper(QuizDtoToEntityMapper baseMapper, SuitRepository suitRepo) {
-        this.suitRepo = suitRepo;
+    public FullQuizDtoToEntityMapper(QuizDtoToEntityMapper baseMapper) {
         this.baseMapper = baseMapper;
     }
 

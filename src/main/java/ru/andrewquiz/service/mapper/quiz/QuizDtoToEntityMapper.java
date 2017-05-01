@@ -3,8 +3,10 @@ package ru.andrewquiz.service.mapper.quiz;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.andrewquiz.dao.quiz.QuizEntity;
+import ru.andrewquiz.dao.quiz.SuitEntity;
 import ru.andrewquiz.dto.quiz.Quiz;
 import ru.andrewquiz.repository.quiz.SuitRepository;
+import ru.andrewquiz.rest.exception.EntityNotFoundException;
 import ru.andrewquiz.service.mapper.AbstractMapper;
 
 /**
@@ -31,7 +33,16 @@ public class QuizDtoToEntityMapper extends AbstractMapper<Quiz, QuizEntity> {
 
         dst.setName(src.getName());
         dst.setTypeId(src.getType() != null ? src.getType().id() : null);
-        dst.setSuit(src.getSuitId() != null ? suitRepo.findOne(src.getSuitId()) : null);
+
+        if (src.getSuitId() == null) {
+            dst.setSuit(null);
+        } else {
+            SuitEntity suit = suitRepo.findOne(src.getSuitId());
+            if (suit == null) {
+                throw new EntityNotFoundException(SuitEntity.class, src.getSuitId());
+            }
+            dst.setSuit(suit);
+        }
 
         return dst;
     }

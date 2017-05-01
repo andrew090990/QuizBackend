@@ -13,7 +13,7 @@ public class EntityNotFoundException extends RestException {
 
     private static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
 
-    public EntityNotFoundException(String msg) {
+    private EntityNotFoundException(String msg) {
         super(msg);
     }
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.andrewquiz.dao.quiz.CategoryEntity;
 import ru.andrewquiz.dto.quiz.Category;
 import ru.andrewquiz.repository.quiz.CategoryRepository;
+import ru.andrewquiz.rest.exception.EntityNotFoundException;
 import ru.andrewquiz.service.mapper.AbstractMapper;
 
 /**
@@ -31,7 +32,16 @@ public class CategoryDtoToEntityMapper extends AbstractMapper<Category, Category
 
         dst.setDescription(src.getDescription());
         dst.setName(src.getName());
-        dst.setParentCategory(src.getParentCategoryId() != null ? repo.findOne(src.getParentCategoryId()) : null); //TODO not found
+
+        if (src.getParentCategoryId() == null) {
+            dst.setParentCategory(null);
+        } else {
+            CategoryEntity parent = repo.findOne(src.getParentCategoryId());
+            if (parent == null) {
+                throw new EntityNotFoundException(CategoryEntity.class, src.getParentCategoryId());
+            }
+            dst.setParentCategory(parent);
+        }
 
         return dst;
     }
