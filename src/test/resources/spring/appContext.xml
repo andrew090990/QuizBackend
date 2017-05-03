@@ -12,7 +12,6 @@
 
     <import resource="appContext-beans.xml"/>
 
-
     <context:component-scan base-package="ru.andrewquiz"/>
 
     <context:annotation-config />
