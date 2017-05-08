@@ -3,38 +3,61 @@
         xmlns="http://www.springframework.org/schema/security"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:beans="http://www.springframework.org/schema/beans"
-        xmlns:sec="http://www.springframework.org/schema/security"
         xsi:schemaLocation="
       http://www.springframework.org/schema/security
-      http://www.springframework.org/schema/security/spring-security-4.0.xsd
+      http://www.springframework.org/schema/security/spring-security-4.2.xsd
       http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
 
-    <http entry-point-ref="restAuthenticationEntryPoint">
-        <!--<intercept-url pattern="/rest/categories/**" method="POST" access="ROLE_ADMIN"/>-->
-        <intercept-url pattern="/*" access="ROLE_ADMIN"/>
+    <beans:beans profile="default">
+        <http entry-point-ref="restAuthenticationEntryPoint">
+            <intercept-url pattern="/rest/categories" method="POST" access="hasRole('ROLE_ADMIN')"/>
+            <intercept-url pattern="/rest/categories/*" method="DELETE" access="hasRole('ROLE_ADMIN')"/>
+            <intercept-url pattern="/rest/categories/*" method="PUT" access="hasRole('ROLE_ADMIN')"/>
 
-        <form-login
-                authentication-success-handler-ref="mySuccessHandler"
-                authentication-failure-handler-ref="myFailureHandler"
-        />
+            <intercept-url pattern="/rest/suits" method="POST" access="hasRole('ROLE_ADMIN')"/>
+            <intercept-url pattern="/rest/suits/*" method="DELETE" access="hasRole('ROLE_ADMIN')"/>
+            <intercept-url pattern="/rest/suits/*" method="PUT" access="hasRole('ROLE_ADMIN')"/>
 
-        <logout />
-    </http>
+            <intercept-url pattern="/rest/quizes" method="POST" access="hasRole('ROLE_ADMIN')"/>
+            <intercept-url pattern="/rest/quizes/*" method="DELETE" access="hasRole('ROLE_ADMIN')"/>
+            <intercept-url pattern="/rest/quizes/*" method="PUT" access="hasRole('ROLE_ADMIN')"/>
 
-    <beans:bean id="mySuccessHandler"
-                class="ru.andrewquiz.rest.security.AuthenticationSuccessHandler"/>
+            <form-login
+                    authentication-success-handler-ref="successHandler"
+                    authentication-failure-handler-ref="failureHandler"
+            />
 
-    <beans:bean id="myFailureHandler" class=
-            "org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
+            <logout success-handler-ref="logoutSuccessHandler"/>
 
-    <authentication-manager alias="authenticationManager">
-        <authentication-provider>
-            <user-service>
-                <user name="admin" password="admin" authorities="ROLE_ADMIN"/>
-                <user name="user" password="user" authorities="ROLE_USER"/>
-            </user-service>
-        </authentication-provider>
-    </authentication-manager>
+            <csrf disabled="true"/> <!--TODO read docs-->
+        </http>
+
+        <beans:bean id="successHandler"
+                    class="ru.andrewquiz.rest.security.AuthenticationSuccessHandler"/>
+
+        <beans:bean id="failureHandler" class=
+                "org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
+
+        <beans:bean id="logoutSuccessHandler"
+                    class="ru.andrewquiz.rest.security.LogoutSuccessHandler"/>
+
+        <beans:bean id="restAuthenticationEntryPoint"
+                    class="ru.andrewquiz.rest.security.RestAuthenticationEntryPoint"/>
+
+        <authentication-manager alias="authenticationManager">
+            <authentication-provider>
+                <user-service>
+                    <user name="admin" password="admin" authorities="ROLE_ADMIN"/>
+                    <user name="user" password="user" authorities="ROLE_USER"/>
+                </user-service>
+            </authentication-provider>
+        </authentication-manager>
+    </beans:beans>
+
+    <beans:beans profile="insecure">
+        <beans:bean id="springSecurityFilterChain"
+              class="ru.andrewquiz.rest.security.InsecureFilterChain"/>
+    </beans:beans>
 
 </beans:beans>

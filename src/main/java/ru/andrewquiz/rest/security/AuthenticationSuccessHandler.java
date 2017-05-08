@@ -27,19 +27,22 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
             Authentication authentication)
             throws ServletException, IOException {
 
-        SavedRequest savedRequest
-                = requestCache.getRequest(request, response);
+        SavedRequest savedRequest = requestCache.getRequest(request, response);
 
         if (savedRequest == null) {
             clearAuthenticationAttributes(request);
+
             return;
         }
+
         String targetUrlParam = getTargetUrlParameter();
+
         if (isAlwaysUseDefaultTargetUrl()
                 || (targetUrlParam != null
                 && StringUtils.hasText(request.getParameter(targetUrlParam)))) {
             requestCache.removeRequest(request, response);
             clearAuthenticationAttributes(request);
+
             return;
         }
 
