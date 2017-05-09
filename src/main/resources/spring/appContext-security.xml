@@ -46,13 +46,11 @@
                     class="ru.andrewquiz.rest.security.RestAuthenticationEntryPoint"/>
 
         <authentication-manager alias="authenticationManager">
-            <authentication-provider>
-                <user-service>
-                    <user name="admin" password="admin" authorities="ROLE_ADMIN"/>
-                    <user name="user" password="user" authorities="ROLE_USER"/>
-                </user-service>
-            </authentication-provider>
+            <authentication-provider user-service-ref="customUserDetailsService" />
         </authentication-manager>
+
+        <beans:bean id="customUserDetailsService"
+                    class="ru.andrewquiz.rest.security.CustomUserDetailsService"/>
     </beans:beans>
 
     <beans:beans profile="insecure">
