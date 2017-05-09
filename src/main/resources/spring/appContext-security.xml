@@ -46,11 +46,15 @@
                     class="ru.andrewquiz.rest.security.RestAuthenticationEntryPoint"/>
 
         <authentication-manager alias="authenticationManager">
-            <authentication-provider user-service-ref="customUserDetailsService" />
+            <authentication-provider user-service-ref="customUserDetailsService">
+                <password-encoder ref="bcryptEncoder"/>
+            </authentication-provider>
         </authentication-manager>
 
         <beans:bean id="customUserDetailsService"
                     class="ru.andrewquiz.rest.security.CustomUserDetailsService"/>
+
+        <beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
     </beans:beans>
 
     <beans:beans profile="insecure">
