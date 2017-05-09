@@ -1,6 +1,9 @@
 package ru.andrewquiz.dao.auth;
 
+import ru.andrewquiz.dao.Identifiable;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,12 +12,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "`users`", uniqueConstraints = @UniqueConstraint(columnNames = {"username"}))
-public class UserEntity {
+public class UserEntity implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private Long id;
 
     @Column(name = "username", nullable = false)
     private String userName;
@@ -28,14 +31,14 @@ public class UserEntity {
     @ElementCollection
     @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role_name")
-    private List<String> roleNames;
+    private List<String> roleNames = new ArrayList<String>();
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserName() {

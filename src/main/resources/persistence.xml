@@ -11,5 +11,6 @@
 		<class>ru.andrewquiz.dao.quiz.FullQuizEntity</class>
 		<class>ru.andrewquiz.dao.quiz.QuestionEntity</class>
 		<class>ru.andrewquiz.dao.quiz.AnswerEntity</class>
+		<class>ru.andrewquiz.dao.auth.UserEntity</class>
 	</persistence-unit>
 </persistence>

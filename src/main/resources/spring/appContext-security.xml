@@ -23,6 +23,9 @@
             <intercept-url pattern="/rest/quizes/*" method="DELETE" access="hasRole('ROLE_ADMIN')"/>
             <intercept-url pattern="/rest/quizes/*" method="PUT" access="hasRole('ROLE_ADMIN')"/>
 
+            <intercept-url pattern="/rest/users" method="POST" access="isAnonymous()"/>
+            <intercept-url pattern="/rest/users" method="PUT" access="isAuthenticated()"/>
+
             <form-login
                     authentication-success-handler-ref="successHandler"
                     authentication-failure-handler-ref="failureHandler"
@@ -58,8 +61,7 @@
     </beans:beans>
 
     <beans:beans profile="insecure">
-        <beans:bean id="springSecurityFilterChain"
-              class="ru.andrewquiz.rest.security.InsecureFilterChain"/>
+        <beans:bean id="springSecurityFilterChain" class="ru.andrewquiz.rest.security.InsecureFilterChain"/>
     </beans:beans>
 
 </beans:beans>
