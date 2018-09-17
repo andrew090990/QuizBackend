@@ -1,11 +1,16 @@
 package ru.andrewquiz.service.quiz;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.SuitEntity;
 import ru.andrewquiz.dto.quiz.Suit;
 import ru.andrewquiz.repository.quiz.SuitRepository;
-import ru.andrewquiz.util.mapper.CustomDozerBeanMapper;
+import ru.andrewquiz.service.AbstractResourceService;
+import ru.andrewquiz.service.Validator;
+import ru.andrewquiz.service.mapper.AbstractMapper;
+import ru.andrewquiz.service.mapper.quiz.SuitDtoToEntityMapper;
+import ru.andrewquiz.service.mapper.quiz.SuitEntityToDtoMapper;
 
 import java.util.List;
 
@@ -14,39 +19,57 @@ import java.util.List;
  */
 
 @Service
-public class SuitService {
+public class SuitService extends AbstractResourceService<Suit, SuitEntity> {
 
-    public List<Suit> getSuits() {
+    private SuitRepository repo;
 
-        Iterable<SuitEntity> suitEntities = repo.findAll();
+    private SuitValidator validator;
 
-        List<Suit> suits = mapper.mapList(suitEntities, Suit.class);
+    private SuitDtoToEntityMapper dtoToEntityMapper;
 
-        return suits;
+    private SuitEntityToDtoMapper entityToDtoMapper;
+
+    @Autowired
+    public SuitService(SuitRepository repo, SuitValidator validator, SuitDtoToEntityMapper dtoToEntityMapper, SuitEntityToDtoMapper entityToDtoMapper) {
+
+        this.repo = repo;
+        this.validator = validator;
+        this.entityToDtoMapper = entityToDtoMapper;
+        this.dtoToEntityMapper = dtoToEntityMapper;
     }
 
-    public List<Suit> getSuitsByCategoryId(long categoryId) {
+    public List<Suit> getSuitsByCategoryId(Long categoryId) {
 
         Iterable<SuitEntity> suitEntities = repo.findByCategoryId(categoryId);
 
-        List<Suit> suits = mapper.mapList(suitEntities, Suit.class);
+        List<Suit> suits = entityToDtoMapper.mapList(suitEntities);
 
         return suits;
     }
 
-    public Suit getSuit(long id) {
-
-        SuitEntity suitEntity = repo.findOne(id);
-
-        Suit suit = mapper.map(suitEntity, Suit.class);
-
-        return suit;
+    @Override
+    protected Class<Suit> getDtoClass() {
+        return Suit.class;
     }
 
+    @Override
+    protected CrudRepository<SuitEntity, Long> getRepo() {
+        return repo;
+    }
 
-    @Autowired
-    private SuitRepository repo;
+    @Override
+    protected Validator<Suit, SuitEntity> getValidator() {
+        return validator;
+    }
 
-    @Autowired
-    private CustomDozerBeanMapper mapper;
+    @Override
+    protected AbstractMapper<Suit, SuitEntity> getDtoToEntityMapper() {
+        return dtoToEntityMapper;
+    }
+
+    @Override
+    protected AbstractMapper<SuitEntity, Suit> getEntityToDtoMapper() {
+        return entityToDtoMapper;
+    }
+
 }

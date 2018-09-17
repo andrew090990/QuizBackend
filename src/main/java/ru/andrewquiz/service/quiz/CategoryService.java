@@ -1,11 +1,16 @@
 package ru.andrewquiz.service.quiz;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import ru.andrewquiz.dao.quiz.CategoryEntity;
 import ru.andrewquiz.dto.quiz.Category;
 import ru.andrewquiz.repository.quiz.CategoryRepository;
-import ru.andrewquiz.util.mapper.CustomDozerBeanMapper;
+import ru.andrewquiz.service.AbstractResourceService;
+import ru.andrewquiz.service.Validator;
+import ru.andrewquiz.service.mapper.AbstractMapper;
+import ru.andrewquiz.service.mapper.quiz.CategoryDtoToEntityMapper;
+import ru.andrewquiz.service.mapper.quiz.CategoryEntityToDtoMapper;
 
 import java.util.List;
 
@@ -14,30 +19,57 @@ import java.util.List;
  */
 
 @Service
-public class CategoryService {
+public class CategoryService extends AbstractResourceService<Category, CategoryEntity> {
 
-    public List<Category> getCategories() {
+    private CategoryRepository repo;
 
-        Iterable<CategoryEntity> categoryEntities = repo.findAll();
+    private CategoryDtoToEntityMapper dtoToEntityMapper;
 
-        List<Category> categories = mapper.mapList(categoryEntities, Category.class);
+    private CategoryEntityToDtoMapper entityToDtoMapper;
+
+    private CategoryValidator validator;
+
+    @Autowired
+    public CategoryService(CategoryRepository repo, CategoryValidator validator,
+                           CategoryDtoToEntityMapper dtoToEntityMapper, CategoryEntityToDtoMapper entityToDtoMapper) {
+
+        this.repo = repo;
+        this.validator = validator;
+        this.entityToDtoMapper = entityToDtoMapper;
+        this.dtoToEntityMapper = dtoToEntityMapper;
+    }
+
+    public List<Category> getCategoriesByParentCategoryId(Long parentCategoryId) {
+
+        Iterable<CategoryEntity> categoryEntities = repo.findByParentCategoryId(parentCategoryId);
+
+        List<Category> categories = entityToDtoMapper.mapList(categoryEntities);
 
         return categories;
     }
 
-    public Category getCategory(long id) {
-
-        CategoryEntity categoryEntity = repo.findOne(id);
-
-        Category category = mapper.map(categoryEntity, Category.class);
-
-        return category;
+    @Override
+    protected Class<Category> getDtoClass() {
+        return Category.class;
     }
 
+    @Override
+    protected CrudRepository<CategoryEntity, Long> getRepo() {
+        return repo;
+    }
 
-    @Autowired
-    private CategoryRepository repo;
+    @Override
+    protected Validator<Category, CategoryEntity> getValidator() {
+        return validator;
+    }
 
-    @Autowired
-    private CustomDozerBeanMapper mapper;
+    @Override
+    protected AbstractMapper<Category, CategoryEntity> getDtoToEntityMapper() {
+        return dtoToEntityMapper;
+    }
+
+    @Override
+    protected AbstractMapper<CategoryEntity, Category> getEntityToDtoMapper() {
+        return entityToDtoMapper;
+    }
 }

@@ -5,20 +5,260 @@
     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
 
-    <bean id="categoryEntity" class="ru.andrewquiz.dao.quiz.CategoryEntity">
+    <bean id="categoryEntity1" class="ru.andrewquiz.dao.quiz.CategoryEntity">
         <property name="id" value="1"/>
-        <property name="name" value="Test Category"/>
+        <property name="name" value="Test Category 1"/>
+        <property name="childCategories">
+            <list>
+                <ref bean="categoryEntity2"/>
+                <ref bean="categoryEntity3"/>
+            </list>
+        </property>
+        <property name="suits">
+            <list/>
+        </property>
+    </bean>
+
+    <bean id="categoryEntity2" class="ru.andrewquiz.dao.quiz.CategoryEntity">
+        <property name="id" value="2"/>
+        <property name="name" value="Test Category 2"/>
+        <property name="childCategories">
+            <list/>
+        </property>
         <property name="suits">
             <list>
-                <ref bean="suitEntity"/>
+                <ref bean="suitEntity1"/>
+            </list>
+        </property>
+        <property name="parentCategory" ref="categoryEntity1"/>
+    </bean>
+
+    <bean id="categoryEntity3" class="ru.andrewquiz.dao.quiz.CategoryEntity">
+        <property name="id" value="3"/>
+        <property name="name" value="Test Category 3"/>
+        <property name="childCategories">
+            <list/>
+        </property>
+        <property name="suits">
+            <list/>
+        </property>
+        <property name="parentCategory" ref="categoryEntity1"/>
+    </bean>
+
+    <bean id="suitEntity1" class="ru.andrewquiz.dao.quiz.SuitEntity">
+        <property name="id" value="1"/>
+        <property name="name" value="Test Suit 1"/>
+        <property name="category" ref="categoryEntity2"/>
+    </bean>
+
+    <bean id="quizEntity1" class="ru.andrewquiz.dao.quiz.QuizEntity">
+        <property name="id" value="1"/>
+        <property name="name" value="Test Quiz 1"/>
+        <property name="suit" ref="suitEntity1"/>
+        <property name="typeId" value="1"/>
+    </bean>
+
+    <bean id="fullQuizEntity1" class="ru.andrewquiz.dao.quiz.FullQuizEntity">
+        <property name="id" value="#{quizEntity1.id}"/>
+        <property name="name" value="#{quizEntity1.name}"/>
+        <property name="suit" value="#{quizEntity1.suit}"/>
+        <property name="typeId" value="#{quizEntity1.typeId}"/>
+        <property name="content" value="test content"/>
+        <property name="instructions" value="test instructions"/>
+        <property name="introduction" value="test introduction"/>
+        <property name="answers">
+            <list>
+                <ref bean="answerEntity1"/>
+                <ref bean="answerEntity2"/>
+                <ref bean="answerEntity3"/>
+                <ref bean="answerEntity4"/>
+            </list>
+        </property>
+        <property name="questions">
+            <list>
+                <ref bean="questionEntity1"/>
+                <ref bean="questionEntity2"/>
             </list>
         </property>
     </bean>
 
-    <bean id="suitEntity" class="ru.andrewquiz.dao.quiz.SuitEntity">
+    <bean id="answerEntity1" class="ru.andrewquiz.dao.quiz.AnswerEntity">
+        <property name="answerId" value="1"/>
+        <property name="answerNumber" value="1"/>
+        <property name="code" value="a"/>
+        <property name="content" value="test content 1"/>
+        <property name="fullQuiz" ref="fullQuizEntity1"/>
+    </bean>
+
+    <bean id="answerEntity2" class="ru.andrewquiz.dao.quiz.AnswerEntity">
+        <property name="answerId" value="2"/>
+        <property name="answerNumber" value="2"/>
+        <property name="code" value="b"/>
+        <property name="content" value="test content 2"/>
+        <property name="fullQuiz" ref="fullQuizEntity1"/>
+    </bean>
+
+    <bean id="answerEntity3" class="ru.andrewquiz.dao.quiz.AnswerEntity">
+        <property name="answerId" value="3"/>
+        <property name="answerNumber" value="3"/>
+        <property name="code" value="a"/>
+        <property name="content" value="test content 3"/>
+        <property name="fullQuiz" ref="fullQuizEntity1"/>
+    </bean>
+
+    <bean id="answerEntity4" class="ru.andrewquiz.dao.quiz.AnswerEntity">
+        <property name="answerId" value="4"/>
+        <property name="answerNumber" value="4"/>
+        <property name="code" value="b"/>
+        <property name="content" value="test content 4"/>
+        <property name="fullQuiz" ref="fullQuizEntity1"/>
+    </bean>
+
+    <bean id="questionEntity1" class="ru.andrewquiz.dao.quiz.QuestionEntity">
+        <property name="questionId" value="1"/>
+        <property name="fullQuiz" ref="fullQuizEntity1"/>
+        <property name="questionNumber" value="1"/>
+        <property name="hint" value="test hint 1"/>
+        <property name="answers">
+            <list>
+                <ref bean="answerEntity1"/>
+                <ref bean="answerEntity2"/>
+            </list>
+        </property>
+        <property name="keys">
+            <list>
+                <ref bean="answerEntity2"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="questionEntity2" class="ru.andrewquiz.dao.quiz.QuestionEntity">
+        <property name="questionId" value="2"/>
+        <property name="fullQuiz" ref="fullQuizEntity1"/>
+        <property name="questionNumber" value="2"/>
+        <property name="hint" value="test hint 2"/>
+        <property name="answers">
+            <list>
+                <ref bean="answerEntity3"/>
+                <ref bean="answerEntity4"/>
+            </list>
+        </property>
+        <property name="keys">
+            <list>
+                <ref bean="answerEntity3"/>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="category1" class="ru.andrewquiz.dto.quiz.Category">
         <property name="id" value="1"/>
-        <property name="name" value="Test Suit"/>
-        <property name="category" ref="categoryEntity"/>
+        <property name="name" value="Test Category 1"/>
+    </bean>
+
+    <bean id="category2" class="ru.andrewquiz.dto.quiz.Category">
+        <property name="id" value="2"/>
+        <property name="name" value="Test Category 2"/>
+        <property name="parentCategoryId" value="1"/>
+    </bean>
+
+    <bean id="category3" class="ru.andrewquiz.dto.quiz.Category">
+        <property name="id" value="3"/>
+        <property name="name" value="Test Category 3"/>
+        <property name="parentCategoryId" value="1"/>
+    </bean>
+
+    <bean id="suit1" class="ru.andrewquiz.dto.quiz.Suit">
+        <property name="id" value="1"/>
+        <property name="categoryId" value="2"/>
+        <property name="name" value="Test Suit 2"/>
+    </bean>
+
+    <bean id="quiz1" class="ru.andrewquiz.dto.quiz.Quiz">
+        <property name="id" value="1"/>
+        <property name="name" value="Test Quiz 1"/>
+        <property name="type" value="MULTIPLE_CHOICE"/>
+        <property name="suitId" value="1"/>
+    </bean>
+
+    <bean id="fullQuiz1" class="ru.andrewquiz.dto.quiz.FullQuiz">
+        <property name="id" value="#{quiz1.id}"/>
+        <property name="name" value="#{quiz1.name}"/>
+        <property name="suitId" value="#{quiz1.suitId}"/>
+        <property name="type" value="#{quiz1.type}"/>
+        <property name="content" value="test content"/>
+        <property name="instructions" value="test instructions"/>
+        <property name="introduction" value="test introduction"/>
+        <property name="answers">
+            <list>
+                <ref bean="answer1"/>
+                <ref bean="answer2"/>
+                <ref bean="answer3"/>
+                <ref bean="answer4"/>
+            </list>
+        </property>
+        <property name="questions">
+            <list>
+                <ref bean="question1"/>
+                <ref bean="question2"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="answer1" class="ru.andrewquiz.dto.quiz.Answer">
+        <property name="answerNumber" value="1"/>
+        <property name="code" value="a"/>
+        <property name="content" value="test content 1"/>
+    </bean>
+
+    <bean id="answer2" class="ru.andrewquiz.dto.quiz.Answer">
+        <property name="answerNumber" value="2"/>
+        <property name="code" value="b"/>
+        <property name="content" value="test content 2"/>
+    </bean>
+
+    <bean id="answer3" class="ru.andrewquiz.dto.quiz.Answer">
+        <property name="answerNumber" value="3"/>
+        <property name="code" value="a"/>
+        <property name="content" value="test content 3"/>
+    </bean>
+
+    <bean id="answer4" class="ru.andrewquiz.dto.quiz.Answer">
+        <property name="answerNumber" value="4"/>
+        <property name="code" value="b"/>
+        <property name="content" value="test content 4"/>
+    </bean>
+
+    <bean id="question1" class="ru.andrewquiz.dto.quiz.Question">
+        <property name="questionNumber" value="1"/>
+        <property name="hint" value="test hint 1"/>
+        <property name="answers">
+            <list>
+                <value>1</value>
+                <value>2</value>
+            </list>
+        </property>
+        <property name="keys">
+            <list>
+                <value>2</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="question2" class="ru.andrewquiz.dto.quiz.Question">
+        <property name="questionNumber" value="2"/>
+        <property name="hint" value="test hint 2"/>
+        <property name="answers">
+            <list>
+                <value>3</value>
+                <value>4</value>
+            </list>
+        </property>
+        <property name="keys">
+            <list>
+                <value>3</value>
+            </list>
+        </property>
     </bean>
 
 </beans>

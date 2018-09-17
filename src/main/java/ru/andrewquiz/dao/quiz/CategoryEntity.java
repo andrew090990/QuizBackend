@@ -1,8 +1,13 @@
 package ru.andrewquiz.dao.quiz;
 
-import ru.andrewquiz.dto.quiz.Category;
+
+import ru.andrewquiz.dao.Identifiable;
+import ru.andrewquiz.dao.Trackable;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -11,12 +16,44 @@ import java.util.List;
 
 @Entity
 @Table(name = "categories")
-public class CategoryEntity {
-    public long getId() {
+public class CategoryEntity implements Identifiable, Trackable, Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id", nullable = false, updatable = false)
+    private Long id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private CategoryEntity parentCategory;
+
+    @Column(name = "description")
+    private String description;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private Calendar createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private Calendar updatedAt;
+
+    @OneToMany(mappedBy = "category")
+    private List<SuitEntity> suits = new ArrayList<SuitEntity>();
+
+    @OneToMany(mappedBy = "parentCategory")
+    private List<CategoryEntity> childCategories = new ArrayList<CategoryEntity>();
+
+    @Override
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    @Override
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -36,15 +73,151 @@ public class CategoryEntity {
         this.suits = suits;
     }
 
+    public void addSuit(SuitEntity suit) {
+        addSuit(suit, true);
+    }
 
-    @Id
-    @Column(name = "id", nullable = false, updatable = false)
-    private long id;
+    protected void addSuit(SuitEntity suit, boolean updateReference) {
+        if (suit == null) {
+            return;
+        }
 
-    @Column(name = "name", nullable = false)
-    private String name;
+        if (suits.contains(suit)) {
+            suits.set(suits.indexOf(suit), suit);
+        } else {
+            suits.add(suit);
+        }
 
-    @OneToMany(mappedBy = "category")
-    private List<SuitEntity> suits;
+        if (updateReference) {
+            suit.setCategory(this, false);
+        }
+    }
 
+    public void removeSuit(SuitEntity suit) {
+        removeSuit(suit, true);
+    }
+
+    protected void removeSuit(SuitEntity suit, boolean updateReference) {
+        if (suit == null) {
+            return;
+        }
+
+        suits.remove(suit);
+
+        if (updateReference) {
+            suit.setCategory(null, false);
+        }
+    }
+
+    public CategoryEntity getParentCategory() {
+        return parentCategory;
+    }
+
+    public void setParentCategory(CategoryEntity parentCategory) {
+        setParentCategory(parentCategory, true);
+    }
+
+    protected void setParentCategory(CategoryEntity parentCategory, boolean updateReference) {
+        if (this.parentCategory != null) {
+            this.parentCategory.removeChildCategory(this, false);
+        }
+
+        this.parentCategory = parentCategory;
+
+        if (parentCategory != null && updateReference) {
+            parentCategory.addChildCategory(this, false);
+        }
+    }
+
+    public List<CategoryEntity> getChildCategories() {
+        return childCategories;
+    }
+
+    public void setChildCategories(List<CategoryEntity> childCategories) {
+        this.childCategories = childCategories;
+    }
+
+    public void addChildCategory(CategoryEntity childCategory) {
+        addChildCategory(childCategory, true);
+    }
+
+    protected void addChildCategory(CategoryEntity childCategory, boolean updateReference) {
+        if (childCategory == null) {
+            return;
+        }
+
+        if (childCategories.contains(childCategory)) {
+            childCategories.set(childCategories.indexOf(childCategory), childCategory);
+        } else {
+            childCategories.add(childCategory);
+        }
+
+        if (updateReference) {
+            childCategory.setParentCategory(this, false);
+        }
+    }
+
+    public void removeChildCategory(CategoryEntity childCategory) {
+        removeChildCategory(childCategory, true);
+    }
+
+    protected void removeChildCategory(CategoryEntity childCategory, boolean updateReference) {
+        if (childCategory == null) {
+            return;
+        }
+
+        childCategories.remove(childCategory);
+
+        if (updateReference) {
+            childCategory.setParentCategory(null, false);
+        }
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public Calendar getCreatedAt() {
+        return createdAt;
+    }
+
+    @Override
+    public void setCreatedAt(Calendar createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public Calendar getUpdatedAt() {
+        return updatedAt;
+    }
+
+    @Override
+    public void setUpdatedAt(Calendar updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass() || id == null) {
+            return false;
+        }
+
+        return id.equals(((CategoryEntity)o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id.hashCode();
+    }
+
+//TODO toString() for all entities, dtos; refactor EntityNotFoundException
 }

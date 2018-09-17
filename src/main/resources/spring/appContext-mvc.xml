@@ -11,7 +11,7 @@
     <mvc:annotation-driven />
 
     <mvc:interceptors>
-        <bean class="ru.andrewquiz.controller.interceptor.LoggingInterceptor" />
+        <bean class="ru.andrewquiz.rest.interceptor.LoggingInterceptor" />
     </mvc:interceptors>
 
 </beans>

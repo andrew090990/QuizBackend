@@ -1,8 +1,26 @@
 package ru.andrewquiz.dto.quiz;
 
 
-public class Category {
-    public long getId() {
+import ru.andrewquiz.dto.AbstractDto;
+
+import java.util.Calendar;
+
+public class Category extends AbstractDto {
+
+    private Long id;
+
+    private String name;
+
+    private Long parentCategoryId;
+
+    private String description;
+
+    private Calendar createdAt;
+
+    private Calendar updatedAt;
+
+    @Override
+    public Long getId() {
         return id;
     }
 
@@ -14,12 +32,39 @@ public class Category {
         this.name = name;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
+    public Long getParentCategoryId() {
+        return parentCategoryId;
+    }
 
-    private long id;
+    public void setParentCategoryId(Long parentCategoryId) {
+        this.parentCategoryId = parentCategoryId;
+    }
 
-    private String name;
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Calendar getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Calendar createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Calendar getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Calendar updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
